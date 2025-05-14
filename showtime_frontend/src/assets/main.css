@@ -17,20 +17,23 @@ a,
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 45%, 0.2);
+    background-color: hsla(105, 100%, 50%, 0.182);
     border-radius: 5px;
   }
 }
 
+
+
 @media (min-width: 1024px) {
   body {
-    display: flex;
-    place-items: center;
+
   }
 
   #app {
-    display: grid;
+    display: block;
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }
+  
+
 }
