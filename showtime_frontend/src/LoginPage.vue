@@ -4,7 +4,7 @@ const username = ref('')
 const password = ref('')
 const loading = ref(false)
 async function handleLogin(): Promise<void> {
-  const response = fetch("http://localhost:3000/api/login",
+  const response = fetch("http://show-time.ddns.net:3000/api/login",
     {
       method: "POST",
       headers: {
