@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import MainTitle from '@/components/MainTitle.vue'
+
 </script>
 
 <template>

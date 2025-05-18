@@ -2,9 +2,24 @@
 import { ref } from 'vue';
 const username = ref('')
 const password = ref('')
-function handleLogin(): void {
-  return
+const loading = ref(false)
+async function handleLogin(): Promise<void> {
+  const response = fetch("http://localhost:3000/api/login",
+    {
+      method: "POST",
+      headers: {
+    "Content-Type": "application/json",
+  },
+  mode: "cors",
+      body: JSON.stringify({"username": username.value, "password": password.value, "option": "login"})
+    }
+  );
 
+  loading.value = true;
+  const res = await response;
+
+  window.alert(await res.text())
+  loading.value = false;
 }
 </script>
 <template>
@@ -12,14 +27,14 @@ function handleLogin(): void {
     <h1>Login</h1>
   </header>
   <div class="login-form">
-    <form @submit.prevent="handleLogin" name="login-form">
+    <form @submit.prevent="handleLogin()" name="login-form">
       <label for="username">E-mail:</label>
       <input type="text" id="username" v-model="username" required />
 
       <label for="password">Password:</label>
       <input type="password" id="password" v-model="password" required />
 
-      <button type="submit">Login</button>
+      <button type="submit" :disabled=loading>Login</button>
     </form>
   </div>
 </template>
