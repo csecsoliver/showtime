@@ -18,6 +18,7 @@ export default defineConfig({
     },
   },
   preview: {
-    host: "0.0.0.0"
+    host: "0.0.0.0",
+    allowedHosts: ["show-time.ddns.net"]
   }
 })
