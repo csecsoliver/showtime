@@ -5,18 +5,42 @@ export default async function userManipulate(option, username, passhash?) {
   //should be rewritten for database usage
  //storage: key=username (email usually), value=json string  
   const storage = createStorage({
-    driver: fsDriver({ base: "./users" }),
+    driver: fsDriver({ base: "./users/" }),
   });
   switch (option) {
     case "getpass":
-      return (await storage.has(username))?JSON.parse((await storage.getItem(username)).toString()).password:undefined
+      if (await storage.has(username)) {
+        const raw = await storage.getItem(username);
+        let str;
+        if (typeof raw === "string") {
+          str = JSON.parse(str);
+        } else{
+            str = raw;
+        }
+        if (str) {
+          return str.password;
+        }
+      }
+      return undefined;
 
     case "checkpass":
-        return (await storage.has(username))? await bcrypt.compare(JSON.parse((await storage.getItem(username)).toString()).password, passhash):false
+      if (await storage.has(username)) {
+        const raw = await storage.getItem(username);
+        let str;
+        if (typeof raw === "string") {
+          str = JSON.parse(str);
+        } else{
+            str = raw
+        }
+        if (str) {
+          return await bcrypt.compare(passhash, str.password);
+        }
+      }
+      return false;
     case "makeuser":
         const user:object= {
             password: passhash,
-            
+
         }
         return await storage.setItem(username, JSON.stringify(user))
     case "":

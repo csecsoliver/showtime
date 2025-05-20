@@ -9,7 +9,7 @@ let register  = false;
 async function handleLogin(): Promise<void> {
 
   const tosend = { username: username.value, password: password.value, option: register?"register":"login" }
-  const response = fetch('http://show-time.ddns.net:3000/api/login', {
+  const response = fetch('http://localhost:3000/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

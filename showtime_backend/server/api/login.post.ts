@@ -12,9 +12,12 @@ export default defineEventHandler(async (event) => {
   let hash = await bcrypt.hash(body.password, 12);
   switch (body.option) {
     case "register":
-      if (body.password.Length >= 8 && body.password.Length <= 72) {
+      console.log(body)
+      console.log(body.password.length)
+      
+      if (body.password.length >= 8 && body.password.length <= 72) {
         if (!(await userManipulate("getpass", body.username))) {
-          await userManipulate("setpass", body.username, hash);
+          await userManipulate("makeuser", body.username, hash);
 
           return { sessionToken: tokenGen(body.username) };
         } else {
@@ -31,7 +34,7 @@ export default defineEventHandler(async (event) => {
       }
       break;
     case "login":
-      if (await userManipulate("checkpass", body.username, hash)) {
+      if (await userManipulate("checkpass", body.username, body.password)) {
         return { sessionToken: tokenGen(body.username) };
       }
       throw createError({ statusCode: 401, statusMessage: "loginFailed" });
