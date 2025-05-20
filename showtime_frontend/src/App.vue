@@ -12,7 +12,7 @@ import MainTitle from '@/components/MainTitle.vue'
     <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About</RouterLink>
-      <a href="/login.html">Login/Register</a>
+      <a href="/login">Login/Register</a>
     </nav>
   </header>
 
