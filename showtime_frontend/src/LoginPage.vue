@@ -4,11 +4,14 @@ const username = ref('')
 const password = ref('')
 const password2 = ref('')
 const loading = ref(false)
-let register  = false;
-
+const register  = ref(false);
+const match = ref('');
 async function handleLogin(): Promise<void> {
-
-  const tosend = { username: username.value, password: password.value, option: register?"register":"login" }
+  if (password.value != password2.value){
+    match.value = "A Jelszavaknak meg kell egyeznie!"
+    return
+  }
+  const tosend = { username: username.value, password: password.value, option: register.value?"register":"login" }
   const response = fetch('http://localhost:3000/api/login', {
     method: 'POST',
     headers: {
@@ -44,10 +47,12 @@ async function signup(){
   if (reg instanceof HTMLElement){
     reg.style.display = "none"
   }
-  register = true;
+  register.value = true;
 
 }
-
+async function resetMatch() {
+match.value = ''
+}
 </script>
 <template>
   <header>
@@ -58,11 +63,11 @@ async function signup(){
         <label for="username">E-mail:</label>
         <input type="text" id="username" v-model="username" required />
         <label for="password">Jelszó:</label>
-        <input type="password" id="password" v-model="password" required />
+        <input type="password" id="password" @change="resetMatch()" v-model="password" required />
         <label for="password2" id="password2l">Jelszó megerősítése:</label>
-        <input type="password" id="password2" v-model="password2" :required="register" />
+        <input type="password" id="password2"  @change="resetMatch()" v-model="password2" :required="register" />
+        <p style="color:red;">{{ match }}</p>
         <button type="submit" id="submit" :disabled="loading">Bejelentkezés</button>
-
         <a href="" @click.prevent="signup()" id="reg">Regisztrálás</a>
       </form>
     </div>
