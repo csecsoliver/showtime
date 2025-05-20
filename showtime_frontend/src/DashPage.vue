@@ -1,28 +1,19 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+
 import MainTitle from '@/components/MainTitle.vue'
-
 </script>
-
 <template>
   <header>
-    <!-- <img alt="Showtime-logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
 
-    <MainTitle> </MainTitle>
+    <MainTitle></MainTitle>
     <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-      <a href="/login">Login/Register</a>
+<RouterLink to="/">Home</RouterLink>
     </nav>
   </header>
-
   <RouterView />
 </template>
-
-<style scoped>
-html{
-  margin: 0 2rem;
-}
+<style>
 nav a {
   margin-right: 1rem;
   color: var(--color-text);
@@ -35,13 +26,9 @@ nav {
 }
 header {
 
-  border-radius: 25px;
   background-color: var(--color-heading);
   padding: 0.5rem 2rem;
-  margin-bottom: 1rem;
-  margin-top: 0.5rem;
-  margin-left: auto;
-  margin-right: auto;
+
 }
 @media (min-width: 1024px) {
   header {
@@ -57,3 +44,4 @@ header {
 
 }
 </style>
+

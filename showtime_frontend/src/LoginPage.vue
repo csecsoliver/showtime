@@ -7,12 +7,12 @@ const loading = ref(false)
 const register  = ref(false);
 const match = ref('');
 async function handleLogin(): Promise<void> {
-  if (password.value != password2.value){
+  if (password.value != password2.value && register.value == true){
     match.value = "A Jelszavaknak meg kell egyeznie!"
     return
   }
   const tosend = { username: username.value, password: password.value, option: register.value?"register":"login" }
-  const response = fetch('http://localhost:3000/api/login', {
+  const response = fetch('http://show-time.ddns.net:3000/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
