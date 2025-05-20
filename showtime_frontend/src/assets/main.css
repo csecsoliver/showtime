@@ -14,12 +14,38 @@ a,
   transition: 0.4s;
   padding: 3px;
 }
+button {
+  width: 8rem;
+  height: 2rem;
+  background-color: var(--sht-pink);
+  color: white;
+  font: inherit;
 
+  font-weight: bold;
+  border: 1px solid var(--color-text);
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+.loading{
+animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 @media (hover: hover) {
   a:hover {
     background-color: hsla(105, 100%, 50%, 0.182);
     border-radius: 5px;
   }
+  button:hover{
+    background-color: var(--sht-pinkhighlight);
+
+  }
+}
+button:active{
+  background-color: var(--sht-pinkhighlight2);
 }
 
 
