@@ -31,6 +31,7 @@ nav a {
 }
 nav {
     display: flex;
+    flex-wrap: wrap;
 
 }
 header {

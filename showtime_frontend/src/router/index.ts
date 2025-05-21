@@ -5,6 +5,21 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/dashboard',
+      redirect: () => {
+        // Get everything after /dashboard
+        window.location.href = `/dashboard`
+        return '/'
+      }
+    },
+    {
+      path: '/dashboard/:catchAll(.*)*',
+      redirect: () => {
+        window.location.href = '/dashboard'
+        return '/'
+      }
+    },
+    {
       path: '/',
       name: 'home',
       component: HomeView,
