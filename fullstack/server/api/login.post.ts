@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
               apiToken: token("gen", body.username),
             },
           });
-          return { sessionToken: token("gen", body.username) };
+          return { apiToken: token("gen", body.username) };
         } else {
           throw createError({
             statusCode: 400,
@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
             apiToken: token("gen", body.username),
           },
         });
-        return { sessionToken: token("gen", body.username) };
+        return { apiToken: token("gen", body.username) };
       }
       throw createError({ statusCode: 401, statusMessage: "loginFailed" });
       break;
