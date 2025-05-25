@@ -9,9 +9,9 @@
       <!-- <img alt="Showtime-logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
       <MainTitle/>
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <a href="/login">Login/Register</a>
+        <NuxtLink to="/">Home</NuxtLink>
+        <NuxtLink to="/about">About</NuxtLink>
+        <NuxtLink to="/login">Login/Register</NuxtLink>
       </nav>
     </header>
     <NuxtPage />
