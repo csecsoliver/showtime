@@ -1,6 +1,7 @@
-import { createStorage } from "unstorage";
+
 import fsDriver from "unstorage/drivers/fs";
 import bcrypt from "bcrypt";
+import { createStorage } from "unstorage";
 export default async function userManipulate(option: string, username: string, passhash?: string) {
   //should be rewritten for database usage
  //storage: key=username (email usually), value=json string  
@@ -33,14 +34,14 @@ export default async function userManipulate(option: string, username: string, p
             str = raw
         }
         if (str) {
-          return await bcrypt.compare(passhash, str.password);
+          return await bcrypt.compare(passhash??'', str.password);
         }
       }
       return false;
     case "makeuser":
         
         return await storage.setItem(username, JSON.stringify(makeuser(username, passhash as string)));
-    case "":
+    case "checkauth":
         break;
     default:
       break;

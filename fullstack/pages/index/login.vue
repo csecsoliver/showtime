@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+  import { ref } from 'vue'
+
 const username = ref('')
 const password = ref('')
 const password2 = ref('')
@@ -12,22 +13,22 @@ async function handleLogin(): Promise<void> {
     return
   }
   const tosend = { username: username.value, password: password.value, option: register.value?"register":"login" }
-  const response = fetch('/api/login', {
+  const response = $fetch('/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    mode: 'cors',
     body: JSON.stringify(tosend),
   })
 
 
   document.getElementById("submit")?.classList.add("loading")
   loading.value = true;
-  const res = await response;
+  await response;
   document.getElementById("submit")?.classList.remove("loading")
   loading.value = false;
-  window.alert(await res.text());
+
+  navigateTo('/dashboard');
 }
 
 async function signup(){
