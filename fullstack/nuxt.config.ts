@@ -12,5 +12,9 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxt/ui',
     'nuxt-auth-utils',
-  ]
+  ],
+  css: ['~/assets/main.css'],
+  ui: {
+    colorMode: false
+  }
 })

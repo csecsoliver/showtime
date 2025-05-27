@@ -1,4 +1,17 @@
 <script setup lang="ts">
+import { CreateWorkshop } from '#components';
+async function refresh() {
+  const response = await $fetch('/api/workshops', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+
+  });
+  const data = await response;
+  console.log(data);
+}
+refresh();
 </script>
 <template>
   <main>
@@ -10,7 +23,7 @@
     </div>
     <div>
       <h2>Gyorsműveletek</h2>
-      <button>Új foglalkozás</button>
+      <CreateWorkshop/>
       <button>Meghívók</button>
     </div>
 

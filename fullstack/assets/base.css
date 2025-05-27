@@ -1,6 +1,14 @@
 /* color palette from <https://github.com/vuejs/theme> */
+@import "tailwindcss";
+@import "@nuxt/ui";
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
-:root {
+
+@theme static {
+  --font-sans: "Nunito Sans", sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+  --font-heading: "Nunito Sans", sans-serif;
+  --font-body: "Nunito Sans", sans-serif;
+  --font-code: "Courier New", Courier, monospace;
 
   --sht-white-mute: #f2f2f2;
   --sht-lightpink: #FFCED6;
@@ -8,35 +16,21 @@
   --sht-pinkhighlight:#f4798ede;
   --sht-pinkhighlight2: #f4798eb5;
   --sht-black: #181818;
-  --sht-black-soft: #222222;
-  --sht-black-mute: #282828;
-
   --sht-indigo: #2c3e50;
-
-  --sht-divider-light-1: rgba(60, 60, 60, 0.29);
-  --sht-divider-light-2: rgba(60, 60, 60, 0.12);
-  --sht-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --sht-divider-dark-2: rgba(84, 84, 84, 0.48);
   --sht-text:  #410000;
-  --sht-text-light-1: var(--sht-indigo);
-  --sht-text-light-2: rgba(60, 60, 60, 0.66);
-  --sht-text-dark-1: var(--sht-white);
-  --sht-text-dark-2: rgba(235, 235, 235, 0.64);
-}
-
-/* semantic color variables for this project */
-:root {
+  
+  --color-white-mute: var(--sht-white-mute);
+  --color-lightpink: var(--sht-lightpink);
+  --color-pink: var(--sht-pink);
+  --color-pinkhighlight: var(--sht-pinkhighlight);
+  --color-pinkhighlight2: var(--sht-pinkhighlight2);
+  --color-black: var(--sht-black);
+  --color-indigo: var(--sht-indigo);
+  --color-text: var(--sht-text);
   --color-background: var(--sht-lightpink);
-  --color-background-soft: var(--sht-white-soft);
-  --color-background-mute: var(--sht-white-mute);
-
-  --color-border: var(--sht-divider-light-2);
-  --color-border-hover: var(--sht-divider-light-1);
 
   --color-heading: var(--sht-pink);
-  --color-text: var(--sht-text);
 
-  --section-gap: 160px;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -65,6 +59,8 @@
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
+  margin-left: 1rem;
+  margin-right: 1rem;
   transition:
     color 0.5s,
     background-color 0.5s;

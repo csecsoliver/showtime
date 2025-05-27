@@ -6,7 +6,7 @@ import type { SecureSessionData, SessionData, Workshop } from "../types/types";
 import acquireLock from "../plugins/lock";
 // key: id of the group session, value: json of the group session
 const storage = createStorage({
-  driver: fsDriver({ base: "./groupsessions/" }),
+  driver: fsDriver({ base: "./workshops/" }),
 });
 // key: username of the teacher, value: associated group session ids
 const teachers = createStorage({
