@@ -2,9 +2,10 @@ import token from "../plugins/token";
 
 import { createStorage } from "unstorage";
 import fsDriver from "unstorage/drivers/fs";
+import type { SecureSessionData, SessionData, Workshop } from "../types/types";
 // key: id of the group session, value: json of the group session
 const storage = createStorage({
-  driver: fsDriver({ base: "./groupsessions/" }),
+  driver: fsDriver({ base: "./workshops/" }),
 });
 // key: username of the teacher, value: associated group session ids
 const teachers = createStorage({
@@ -13,22 +14,24 @@ const teachers = createStorage({
 // returns all group sessions in json format, list of objects with id, and the other data from the group session
 export default defineEventHandler(async (event) => {
   const session = await requireUserSession(event);
-  if (!session.secure || !token("check", session.secure.apiToken)) {
+  const sessionData = session.user as SessionData;
+  const secureSession = session.secure as SecureSessionData;
+  if (!secureSession || !token("check", secureSession.apiToken)) {
     throw createError({
       statusCode: 401,
       statusMessage: "unauthorized",
     });
   }
-  const sessionids = await teachers.getItem(session.user.name);
-  if (!sessionids) {
-    return {};
+  const worlshopids = await teachers.getItem(sessionData.name) as Array<string> | null;
+  if (!worlshopids) {
+    return [];
   }
-  const sessions: { [key: string]: {location: string, time: Date, participants: number, open:boolean, teachers: Array<string>, } } = {};
-  for (const id of sessionids) {
-    const groupSession = await storage.getItem(id);
-    if (groupSession) {
-      sessions[id] = groupSession;
+  const workshops: Array<Workshop> = [];
+  for (const id of worlshopids) {
+    const workshop = await storage.getItem(id) as Workshop;
+    if (workshop) {
+      workshops.push(workshop);
     }
   }
-  return sessions;
+  return workshops;
 });
