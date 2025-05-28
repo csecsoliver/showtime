@@ -19,7 +19,7 @@ definePageMeta({
     <NuxtPage />
   </div>
 </template>
-<style>
+<style scoped>
 nav a {
   margin-right: 1rem;
   color: var(--color-text);

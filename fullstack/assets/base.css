@@ -1,7 +1,7 @@
 /* color palette from <https://github.com/vuejs/theme> */
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 @import "tailwindcss";
 @import "@nuxt/ui";
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 
 @theme static {
   --font-sans: "Nunito Sans", sans-serif;
@@ -27,6 +27,7 @@
   --color-black: var(--sht-black);
   --color-indigo: var(--sht-indigo);
   --color-text: var(--sht-text);
+  --color-title: var(--sht-text);
   --color-background: var(--sht-lightpink);
 
   --color-heading: var(--sht-pink);
@@ -47,26 +48,17 @@
   }
 } */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
-}
+
 
 :root {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  margin-left: 1rem;
-  margin-right: 1rem;
   transition:
     color 0.5s,
     background-color 0.5s;
   line-height: 1.6;
   font-family: "Nunito Sans", sans-serif;
-  font-optical-sizing: auto;
   font-size: 18px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

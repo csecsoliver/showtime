@@ -2,6 +2,6 @@
 </script>
 <template>
   <UApp>
-    <NuxtPage class="bg-lightpink" />
+    <NuxtPage class="bg-lightpink text-text" />
   </UApp>
 </template>

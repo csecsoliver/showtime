@@ -4,24 +4,31 @@
 </script>
 
 <template>
-  <div>
-    <header>
-      <!-- <img alt="Showtime-logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
-      <MainTitle/>
-      <nav>
-        <NuxtLink to="/">Home</NuxtLink>
-        <NuxtLink to="/about">About</NuxtLink>
-        <NuxtLink to="/login">Login/Register</NuxtLink>
-      </nav>
-    </header>
+  <main>
+    <div class="heading">
+      <header>
+        <!-- <img alt="Showtime-logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
+        <MainTitle/>
+        <nav>
+          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/about">About</NuxtLink>
+          <NuxtLink to="/login">Login/Register</NuxtLink>
+        </nav>
+      </header>
+    </div>
     <NuxtPage />
-  </div>
+  </main>
 </template>
 
 <style scoped>
-html{
-  margin: 0 2rem;
+
+.heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
+main{}
 nav a {
   margin-right: 1rem;
   color: var(--color-text);
@@ -40,16 +47,16 @@ header {
   padding: 0.5rem 2rem;
   margin-bottom: 1rem;
   margin-top: 0.5rem;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  width: calc(100% - 2rem);
 }
-@media (min-width: 1024px) {
+@media (min-width: 800px) {
   header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 80%;
-    margin: 0.5rem inherit auto auto;
 
     padding: 1rem 2rem;
   }
