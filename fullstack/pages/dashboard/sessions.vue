@@ -20,9 +20,9 @@
               4
             </td>
             <td>
-              <button>Részletek</button>
-              <button>Megívó</button>
-              <button>Lemondás</button>
+              <button class="button">Részletek</button>
+              <button class="button">Megívó</button>
+              <button class="button">Lemondás</button>
             </td>
           </tr>
         </tbody>

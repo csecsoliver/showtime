@@ -10,14 +10,12 @@
   padding: 0 !important;
 }
 
-a,
-.green {
+a {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
   padding: 3px;
 }
-button {
+button.button {
   width: 8rem;
   height: 2rem;
   background-color: var(--sht-pink);
@@ -29,6 +27,13 @@ button {
   border-radius: 10px;
   cursor: pointer;
 
+}
+input {
+  padding: 0.5rem;
+  border: 1px solid var(--sht-pink);
+  border-radius: 10px;
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 .loading{
 animation: spin 1s linear infinite;

@@ -1,15 +1,18 @@
 <template>
-  <UModal title="Új foglalkozás létrehozása" size="sm">
-    <UButton label="Open" color="neutral" variant="subtle" />
+  <UModal title="Új foglalkozás létrehozása" size="sm" >
+    <UButton label="Open"  class="button"  />
 
     <template #body>
-        <form action="/api/workshop" method="post">
+        <form action="/api/workshop" method="post" class="flex flex-col gap-4">
             <label for="town">Város</label>
-            <input id="town" type="text" name="town" required>
+            <input id="town" class="" type="text" name="town" required>
             <label for="date">Dátum</label>
             <input id="date" type="datetime" name="date" required>
-            <label for="open">Nyílt foglalkozás</label>
-            <input id="open" type="checkbox" name="open">
+            <div>
+              <label for="open" class="mr-4">Nyílt foglalkozás</label>
+              <input id="open" type="checkbox" name="open">
+            </div>
+            <button type="submit" class="button">Létrehozás</button>
         </form>
     </template>
   </UModal>

@@ -11,7 +11,6 @@ async function refresh() {
   const data = await response;
   console.log(data);
 }
-refresh();
 </script>
 <template>
   <main>
@@ -24,7 +23,7 @@ refresh();
     <div>
       <h2>Gyorsműveletek</h2>
       <CreateWorkshop/>
-      <button>Meghívók</button>
+      <button class="button">Meghívók</button>
     </div>
 
 

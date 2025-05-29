@@ -28,7 +28,7 @@ async function handleLogin(): Promise<void> {
   document.getElementById("submit")?.classList.remove("loading")
   loading.value = false;
 
-  navigateTo('/dashboard');
+  navigateTo('/dashboard'); 
 }
 
 async function signup(){
@@ -43,51 +43,36 @@ match.value = ''
 <template>
   
     <div class="login-form">
-      <form name="login-form" @submit.prevent="handleLogin()">
+      <form name="login-form" class="flex flex-col items-center justify-center mt-4" @submit.prevent="handleLogin()">
         <label for="username">E-mail:</label>
-        <input id="username" v-model="username" type="text" required >
+        <input id="username" v-model="username" class="bg-white" type="text" required >
         <label for="password">Jelszó:</label>
-        <input id="password" v-model="password" type="password" required @change="resetMatch()">
+        <input id="password" v-model="password" class="bg-white" type="password" required @change="resetMatch()">
         <label id="password2l" for="password2" :style="{ display: register ? 'block' : 'none' }">Jelszó megerősítése:</label>
-        <input id="password2" v-model="password2"  type="password" :required="register" :style="{ display: register ? 'block' : 'none' }"  @change="resetMatch()" >
+        <input id="password2" v-model="password2" class="bg-white"  type="password" :required="register" :style="{ display: register ? 'block' : 'none' }"  @change="resetMatch()" >
         <p style="color:red;">{{ match }}</p>
-        <button id="submit" type="submit" :disabled="loading">{{ register ? "Regisztrálás" : "Bejelentkezés" }}</button>
+        <button id="submit" class="button" type="submit" :disabled="loading">{{ register ? "Regisztrálás" : "Bejelentkezés" }}</button>
         <a id="reg" href="" @click.prevent="signup()">{{ register ? "Bejelentkezés" : "Regisztrálás" }}</a>
       </form>
     </div>
 
 </template>
 <style scoped>
-h1{
-  margin-top: 1rem;
-}
-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1rem;
-}
-form * {
-  margin: 10px 0;
-}
+
+
+
+
 input {
   padding: 0.5rem;
   border: 1px solid var(--sht-pink);
   border-radius: 10px;
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 label{
- margin-bottom: 0;
+ margin-bottom: 0.25rem;
 }
-#mode{
-  margin: 0 auto;
-  width: fit-content;
-}
+
 #password2, #password2l{
   display: none;
 }
