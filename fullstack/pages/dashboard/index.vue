@@ -6,14 +6,15 @@ async function refresh() {
     headers: {
       'Content-Type': 'application/json',
     },
-
+    
   });
   const data = await response;
   console.log(data);
 }
+
 </script>
 <template>
-  <main>
+  <main class="flex flex-wrap justify-center items-center mt-4">
     <div>
       <h2>Következő foglalkozások</h2>
       <ul>
@@ -23,7 +24,7 @@ async function refresh() {
     <div>
       <h2>Gyorsműveletek</h2>
       <CreateWorkshop/>
-      <button class="button">Meghívók</button>
+      <button class="button" @click="refresh()">Meghívók</button>
     </div>
 
 
@@ -31,13 +32,7 @@ async function refresh() {
 </template>
 
 <style scoped>
-  main {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-    width: 100%;
-    flex-wrap: wrap;
-  }
+
   main > div {
     width : 30rem;
     padding: 0.2rem 0.5rem;

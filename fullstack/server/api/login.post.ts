@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
           await userManipulate("makeuser", body.username, hash);
           await replaceUserSession(event, {
             user: {
-              name: "body.username",
+              name: body.username,
             },
             secure: {
               apiToken: token("gen", body.username),
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
       if (await userManipulate("checkpass", body.username, body.password)) {
         await replaceUserSession(event, {
           user: {
-            name: "body.username",
+            name: body.username,
           },
           secure: {
             apiToken: token("gen", body.username),

@@ -1,5 +1,5 @@
 <template>
-<main>
+<main class="flex flex-wrap gap-4">
   <div>
     <h2>Beállítások</h2>
     <ul>
@@ -8,14 +8,14 @@
   </div>
   <div>
     <h2>Gyorsműveletek</h2>
-    <button>Új foglalkozás</button>
-    <button>Meghívók</button>
+    <button class="button">Új foglalkozás</button>
+    <button class="button">Meghívók</button>
   </div>
   <div>
     <h2>Profil</h2>
-    <button>Profil szerkesztése</button>
-    <button>Jelszó módosítása</button>
-    <button>Profil törlése</button>
+    <button class="button">Profil szerkesztése</button>
+    <button class="button">Jelszó módosítása</button>
+    <button class="button">Profil törlése</button>
   </div>
   <div>
     <h2>Fiók</h2>
@@ -26,25 +26,25 @@
 </main>
 </template>
 <style scoped>
-main {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
+
 main > div {
   width: 30rem;
-  padding: 0.2rem 0.5rem;
+  padding: 0.7rem 1rem;
   margin: 0.5rem;
   border: 1px solid var(--sht-text);
   border-radius: 10px;
   height: fit-content;
 }
-button {
-  margin: 0.5rem;
+.button {
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;
   width: fit-content;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 h2 {
   font-weight: bold;
   font-size: 1.25rem;
+  margin-bottom :0.5rem ;
 }
 </style>

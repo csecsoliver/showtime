@@ -29,6 +29,7 @@ async function handleLogin(): Promise<void> {
   loading.value = false;
 
   navigateTo('/dashboard'); 
+  console.log("Login response:", response);
 }
 
 async function signup(){
