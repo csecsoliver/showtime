@@ -1,24 +1,43 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import type { Workshop } from '~/server/types/types';
+import ViewWorkshop from '~/components/ViewWorkshop.vue';
+const workshops: globalThis.Ref<Workshop[]> = ref([]);
+async function refresh() {
+  const response = await $fetch('/api/workshops', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    
+  });
+  const data = response;
+  workshops.value = data;
+}
+refresh();
+</script>
 <template>
   <main class="flex flex-wrap justify-center items-center mt-4">
     
     <table class="table-auto w-9/10">
       <thead>
-        <tr><th colspan="4"><h2>Foglalkozások</h2></th></tr>
-        
-      </thead>
-      <tbody>
+        <tr><th colspan="4"><h2 @click="refresh()">Foglalkozások</h2></th></tr>
+        <tr/>
         <tr>
           <th style="width: 30%">Időpont</th>
           <th style="width: 20%">Helyszín</th>
           <th style="width: 10%">Létszám</th>
           <th style="width: 40%">Műveletek</th>
         </tr>
-        <tr>
-          <td>2023.10.01 10:00</td>
-          <td>Szeged</td>
-          <td>4</td>
+      </thead>
+      <tbody>
+        <tr v-for="i in workshops" :key="i.id">
+          <td>{{ i.time.toString() }}</td>
+          <td>{{ i.town }}</td>
+          <td>{{ i.participants.length }}</td>
           <td>
-            <button class="button">Részletek</button>
+            
+            <ViewWorkshop :id="i.id" />
             <button class="button">Megívó</button>
             <button class="button">Lemondás</button>
           </td>
@@ -30,9 +49,12 @@
 <style scoped>
 th,
 td {
-  border-collapse: collapse;
+  
   border: 1px solid var(--sht-text);
-  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+table {
+  border-collapse: collapse;
 }
 th {
   background-color: var(--sht-pink);

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { CreateWorkshop } from '#components';
+import { ref } from 'vue';
+import type { Workshop } from '~/server/types/types';
+const workshops: globalThis.Ref<Workshop[]> = ref([]);
 async function refresh() {
   const response = await $fetch('/api/workshops', {
     method: 'GET',
@@ -8,17 +10,19 @@ async function refresh() {
     },
     
   });
-  const data = await response;
-  console.log(data);
+  const data = response;
+  workshops.value = data;
 }
+refresh();
 
 </script>
 <template>
   <main class="flex flex-wrap justify-center items-center mt-4">
     <div>
       <h2>Következő foglalkozások</h2>
-      <ul>
-        <li>Example 1</li>
+      <ul v-for="i in workshops" :key="i.id">
+        <li>{{ i.town }} - {{ i.time }}</li>
+        
       </ul>
     </div>
     <div>

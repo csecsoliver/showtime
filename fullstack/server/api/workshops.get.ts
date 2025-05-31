@@ -2,7 +2,7 @@ import token from "../plugins/token";
 
 import { createStorage } from "unstorage";
 import fsDriver from "unstorage/drivers/fs";
-import type { SecureSessionData, SessionData, Workshop } from "../types/types";
+import type { SecureSessionData, SessionData, Teacher, Workshop } from "../types/types";
 // key: id of the group session, value: json of the group session
 const storage = createStorage({
   driver: fsDriver({ base: "./workshops/" }),
@@ -22,12 +22,10 @@ export default defineEventHandler(async (event) => {
       statusMessage: "unauthorized",
     });
   }
-  const worlshopids = await teachers.getItem(sessionData.name) as Array<string> | null;
-  if (!worlshopids) {
-    return [];
-  }
+  const teacher = await teachers.getItem(sessionData.name) as Teacher | null;
+  
   const workshops: Array<Workshop> = [];
-  for (const id of worlshopids) {
+  for (const id of teacher? teacher.workshops : []) {
     const workshop = await storage.getItem(id) as Workshop;
     if (workshop) {
       workshops.push(workshop);

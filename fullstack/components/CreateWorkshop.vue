@@ -29,7 +29,7 @@ async function submitWorkshop() {
 </script>
 <template>
   <UModal title="Új foglalkozás létrehozása" size="sm" >
-    <UButton label="Open"  class="button"  />
+    <button class="button"  >Létrehozás</button>
 
     <template #body>
         <form class="flex flex-col gap-4" @submit.prevent="submitWorkshop()">

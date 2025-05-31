@@ -2,7 +2,7 @@ export interface Workshop {
   id: number;
   town: string;
   location: string | null;
-  time: Date;
+  time: string | Date;
   participants: Array<Participant>;
   open: boolean;
   teachers: Array<string>;
@@ -18,4 +18,10 @@ export interface SecureSessionData {
 }
 export interface SessionData {
   name: string;
+}
+export interface Teacher {
+  email: string;
+  name?: string;
+  workshops: Array<string>;
+  phone?: string;
 }
