@@ -1,5 +1,5 @@
 export interface Workshop {
-  id: number;
+  id: string;
   town: string;
   location: string | null;
   time: string | Date;
