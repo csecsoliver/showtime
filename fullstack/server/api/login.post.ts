@@ -8,12 +8,11 @@ export default defineEventHandler(async (event) => {
 
   switch (body.option) {
     case "register":
-      // eslint-disable-next-line no-case-declarations
-      const hash = await bcrypt.hash(body.password, 12);
       console.log(body);
-      console.log(body.password.length);
+      console.log(body.password?.length);
       
-      if (body.password.length >= 8 && body.password.length <= 72) {
+      if (typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 72) {
+        const hash = await bcrypt.hash(body.password, 12);
         if (!(await userManipulate("getpass", body.username))) {
           await userManipulate("makeuser", body.username, hash);
           await replaceUserSession(event, {

@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: doer
+  namespace: default
+  labels:
+    k8s-app: doer
+spec:
+  template:
+    metadata:
+      name: doer
+      labels:
+        k8s-app: doer
+    spec:
+      containers:
+        - name: doer
+          image: ubuntu
+          command: ["/bin/sh"]
+          args:
+            - -c
+            - >-
+                apt update &&
+                apt install curl -y &&
+                apt install git -y &&
+                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash &&
+                \. "$HOME/.nvm/nvm.sh" &&
+                nvm install 22 &&
+                node -v &&
+                nvm current &&
+                npm -v &&
+                git clone https://github.com/csecsoliver/showtime &&
+                cd ./showtime/fullstack &&
+                npm i &&
+                npm run build &&
+                cd .output &&
+                tar cvf built.tar * &&
+                curl https://l.station307.com/PLACEHOLDER/built.tar --upload-file built.tar
+          resources:
+            requests:
+              memory: 3000Mi
+          securityContext:
+            privileged: true
+      restartPolicy: Never
