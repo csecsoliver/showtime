@@ -6,12 +6,13 @@ import userManipulate from "../plugins/users";
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
-  const hash = await bcrypt.hash(body.password, 12);
   switch (body.option) {
     case "register":
+      // eslint-disable-next-line no-case-declarations
+      const hash = await bcrypt.hash(body.password, 12);
       console.log(body);
       console.log(body.password.length);
-
+      
       if (body.password.length >= 8 && body.password.length <= 72) {
         if (!(await userManipulate("getpass", body.username))) {
           await userManipulate("makeuser", body.username, hash);
