@@ -17,4 +17,9 @@ export default defineNuxtConfig({
   ui: {
     colorMode: false,
   },
+  runtimeConfig: {
+    session: {
+      password: "asswordDDDDDDDDDDDDDDDDDDDDDDDDD",
+    },
+  },
 });
