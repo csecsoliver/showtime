@@ -2,16 +2,16 @@ import token from "../plugins/token";
 
 import { createStorage } from "unstorage";
 import fsDriver from "unstorage/drivers/fs";
-import type { SecureSessionData, SessionData, Teacher, Workshop } from "../types/types";
+import type { SecureSessionData, SessionData, Workshop } from "../types/types";
 // import acquireLock from "../plugins/lock";
 // key: id of the group session, value: json of the group session
 const storage = createStorage({
   driver: fsDriver({ base: "./workshops/" }),
 });
 // key: username of the teacher, value: associated group session ids
-const teachers = createStorage({
-  driver: fsDriver({ base: "./teachers/" }),
-});
+// const teachers = createStorage({
+//   driver: fsDriver({ base: "./teachers/" }),
+// });
 
 export default defineEventHandler(async (event) => {
   // const release = await acquireLock(); // Wait for lock

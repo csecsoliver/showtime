@@ -10,9 +10,9 @@
         <!-- <img alt="Showtime-logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
         <MainTitle/>
         <nav class="flex flex-wrap font-bold">
-          <NuxtLink to="/">Home</NuxtLink>
-          <NuxtLink to="/about">About</NuxtLink>
-          <NuxtLink to="/login">Login/Register</NuxtLink>
+          <NuxtLink to="/">Főoldal</NuxtLink>
+          <NuxtLink to="/workshops">Foglalkozások</NuxtLink>
+          <NuxtLink to="/login">Bejelentkezés/Regisztráció</NuxtLink>
         </nav>
       </header>
     </div>

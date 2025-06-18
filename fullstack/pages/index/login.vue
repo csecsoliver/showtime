@@ -1,68 +1,107 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
-
-const username = ref('')
-const password = ref('')
-const password2 = ref('')
-const loading = ref(false)
-const register  = ref(false);
-const match = ref('');
+import { ref } from "vue";
+const toast = useToast();
+const username = ref("");
+const password = ref("");
+const password2 = ref("");
+const loading = ref(false);
+const register = ref(false);
+const match = ref("");
 async function handleLogin(): Promise<void> {
-  if (password.value != password2.value && register.value == true){
-    match.value = "A Jelszavaknak meg kell egyeznie!"
-    return
+  if (password.value != password2.value && register.value == true) {
+    match.value = "A Jelszavaknak meg kell egyeznie!";
+    return;
   }
-  const tosend = { username: username.value, password: password.value, option: register.value?"register":"login" }
-  const response = $fetch('/api/login', {
-    method: 'POST',
+  const tosend = {
+    username: username.value,
+    password: password.value,
+    option: register.value ? "register" : "login",
+  };
+  const response = $fetch("/api/login", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(tosend),
-  })
+  });
 
-
-  document.getElementById("submit")?.classList.add("loading")
+  document.getElementById("submit")?.classList.add("loading");
   loading.value = true;
-  await response;
-  document.getElementById("submit")?.classList.remove("loading")
-  loading.value = false;
-
-  navigateTo('/dashboard'); 
+  try {
+    await response;
+  } catch (error) {
+    toast.add({
+      title: (error as Error).message,
+      color: "error",
+    });
+    document.getElementById("submit")?.classList.remove("loading");
+    loading.value = false;
+    return
+  }
   console.log("Login response:", response);
+
+  // navigateTo('/dashboard');
+  location.href = "/dashboard";
+
 }
 
-async function signup(){
-  
+async function signup() {
   register.value = !register.value;
-
 }
 async function resetMatch() {
-match.value = ''
+  match.value = "";
 }
 </script>
 <template>
-  
-    <div class="login-form">
-      <form name="login-form" class="flex flex-col items-center justify-center mt-4" @submit.prevent="handleLogin()">
-        <label for="username">E-mail:</label>
-        <input id="username" v-model="username" class="bg-white" type="text" required >
-        <label for="password">Jelszó:</label>
-        <input id="password" v-model="password" class="bg-white" type="password" required @change="resetMatch()">
-        <label id="password2l" for="password2" :style="{ display: register ? 'block' : 'none' }">Jelszó megerősítése:</label>
-        <input id="password2" v-model="password2" class="bg-white"  type="password" :required="register" :style="{ display: register ? 'block' : 'none' }"  @change="resetMatch()" >
-        <p style="color:red;">{{ match }}</p>
-        <button id="submit" class="button" type="submit" :disabled="loading">{{ register ? "Regisztrálás" : "Bejelentkezés" }}</button>
-        <a id="reg" href="" @click.prevent="signup()">{{ register ? "Bejelentkezés" : "Regisztrálás" }}</a>
-      </form>
-    </div>
-
+  <div class="login-form">
+    <form
+      name="login-form"
+      class="flex flex-col items-center justify-center mt-4"
+      @submit.prevent="handleLogin()"
+    >
+      <label for="username">E-mail:</label>
+      <input
+        id="username"
+        v-model="username"
+        class="bg-white"
+        type="text"
+        required
+      >
+      <label for="password">Jelszó:</label>
+      <input
+        id="password"
+        v-model="password"
+        class="bg-white"
+        type="password"
+        required
+        @change="resetMatch()"
+      >
+      <label
+        id="password2l"
+        for="password2"
+        :style="{ display: register ? 'block' : 'none' }"
+        >Jelszó megerősítése:</label
+      >
+      <input
+        id="password2"
+        v-model="password2"
+        class="bg-white"
+        type="password"
+        :required="register"
+        :style="{ display: register ? 'block' : 'none' }"
+        @change="resetMatch()"
+      >
+      <p style="color: red">{{ match }}</p>
+      <button id="submit" class="button" type="submit" :disabled="loading">
+        {{ register ? "Regisztrálás" : "Bejelentkezés" }}
+      </button>
+      <a id="reg" href="" @click.prevent="signup()">{{
+        register ? "Bejelentkezés" : "Regisztrálás"
+      }}</a>
+    </form>
+  </div>
 </template>
 <style scoped>
-
-
-
-
 input {
   padding: 0.5rem;
   border: 1px solid var(--sht-pink);
@@ -70,12 +109,12 @@ input {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-label{
- margin-bottom: 0.25rem;
+label {
+  margin-bottom: 0.25rem;
 }
 
-#password2, #password2l{
+#password2,
+#password2l {
   display: none;
 }
-
 </style>
