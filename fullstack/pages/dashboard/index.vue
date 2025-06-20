@@ -10,8 +10,7 @@ async function refresh() {
     },
     
   });
-  const data = response;
-  workshops.value = data;
+  workshops.value = response as Workshop[];
 }
 refresh();
 

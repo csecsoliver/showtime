@@ -35,7 +35,7 @@ spec:
                     npm run build &&
                     cd .output &&
                     tar cvf built.tar * &&
-                    curl https://l.station307.com/77kteLhKsgHVVxkmkaEVmG/built.tar --upload-file built.tar
+                    curl https://l.station307.com/Q7TQGMA6kcnuygbzXVBcPf/built.tar --upload-file built.tar
               resources:
                 requests:
                   memory: 3000Mi

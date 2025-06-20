@@ -7,10 +7,10 @@ const date = ref("");
 const open = ref(false);
 const location = ref("");
 const props = defineProps<{
-  id: number;
+  id: string;
 }>();
 
-const workshop: globalThis.Ref<Workshop> = ref({
+const workshop: Ref<Workshop> = ref({
   id: props.id,
   town: "",
   time: "",

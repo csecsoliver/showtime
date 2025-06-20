@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import type { Workshop } from '~/server/types/types';
 import ViewWorkshop from '~/components/ViewWorkshop.vue';
-const workshops: globalThis.Ref<Workshop[]> = ref([]);
+const workshops: Ref<Workshop[]> = ref([]);
 async function refresh() {
   const response = await $fetch('/api/workshops', {
     method: 'GET',

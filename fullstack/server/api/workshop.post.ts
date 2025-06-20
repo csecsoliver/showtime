@@ -30,14 +30,14 @@ export default defineEventHandler(async (event) => {
     event
   );
   
-  let nextId = (await storage.getItem("currentID")) as number | null;
+  let nextId = (await storage.getItem("currentID")) as string | null | number;
   if (nextId === null) {
     nextId = 0;
   }
-  nextId++;
+  nextId = parseInt(`${nextId}`) + 1;
   await storage.setItem("currentID", nextId);
   const workshop: Workshop = {
-    id: nextId,
+    id: nextId.toString(),
     town: body.town,
     location: null,
     time: body.date,
