@@ -7,5 +7,5 @@ export default defineNuxtRouteMiddleware(() => {
   } catch {
     return navigateTo("/login");
   }
-
+  
 });

@@ -27,7 +27,7 @@ refresh();
     <div>
       <h2>Gyorsműveletek</h2>
       <CreateWorkshop/>
-      <button class="button" @click="refresh()">Meghívók</button>
+      <CreateInvite/>
     </div>
 
 

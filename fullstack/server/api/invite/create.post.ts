@@ -1,9 +1,9 @@
 import fsDriver from "unstorage/drivers/fs";
 import { createStorage } from "unstorage";
-import type { InviteBasic, InviteStored, SecureSessionData, SessionData } from "~/server/types/types";
+import type { InviteStored, SecureSessionData, SessionData } from "~/server/types/types";
 import token from "~/server/plugins/token";
 const invites = createStorage({
-  driver: fsDriver({ base: "./workshops/" }),
+  driver: fsDriver({ base: "./invites/" }),
 });
 const workshops = createStorage({
   driver: fsDriver({ base: "./workshops/" }),
