@@ -1,11 +1,23 @@
 
 import { createStorage } from "unstorage";
-import type { SessionData } from "~/server/types/types";
+import fsDriver from "unstorage/drivers/fs";
+import transporter from "~/server/plugins/email";
+import type { InviteStored, SessionData } from "~/server/types/types";
 const invites = createStorage({
   driver: fsDriver({base: "./invites"})
 })
 export default defineEventHandler(async (event) => {
-  const body = (await readBody(event)) as string[];
+  const body = await readBody(event) as string[];
+  if (!body || !Array.isArray(body) || body.length === 0) {
+    sendError(
+      event,
+      createError({
+        statusCode: 400,
+        statusMessage: "Invalid request body",
+      })
+    );
+    return;
+  }
   const session = await requireUserSession(event);
   const sessionData = session.user as SessionData;
   if (event.context.userType != "teacher") {
@@ -23,12 +35,21 @@ export default defineEventHandler(async (event) => {
       })
     );
   }
-  const invite = invites.getItem((getRouterParam(event, "id") as string));
+  const invite = await invites.getItem((getRouterParam(event, "id") as string)) as InviteStored;
   if (!invite) {
     sendError( event, createError({
       statusCode: 404,
       statusMessage: "Invite not found",
     }))
   }
-  return "success sending emails to " + body +" as " + sessionData.name
+  console.log(body)
+  for (const e of body) {
+    console.log(await transporter().sendMail({
+      from: "showtime.coe@gmail.com",
+      to: e,
+      subject: `Meghívó foglalkozásre ${sessionData.name} által`,
+      text: `Meghívót kaptál a foglalkozásra. Kérlek, használd az alábbi linket a meghívó megtekintéséhez:\n\nhttps://show-time.ddns.net/invite/${invite.id}\n\nÜdvözlettel,\n${sessionData.name}`,
+    }));
+  }
 });
+

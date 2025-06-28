@@ -1,6 +1,6 @@
 import fsDriver from "unstorage/drivers/fs";
 import { createStorage } from "unstorage";
-import type { InviteBasic, InviteStored } from "~/server/types/types";
+import type { InviteBasic, InviteStored, Workshop } from "~/server/types/types";
 const invites = createStorage({
   driver: fsDriver({ base: "./workshops/" }),
 });
@@ -31,9 +31,11 @@ export default defineEventHandler(async (event) => {
     );
     return;
   }
-  return {
+  const data = {
     id: invite.id,
     invitor: invite.invitor,
-    date: await workshops.getItem(invite.workshopId),
+    date: (await workshops.getItem(invite.workshopId) as Workshop).time,
   } as InviteBasic;
+  console.log(data);
+  return data;
 });

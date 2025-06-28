@@ -22,7 +22,7 @@ async function submitInvite() {
     workshopId: state.value.workshopText.split("(")[1].split(")")[0], // the workshoop id is between the parentheses
   };
   try {
-    const response = await $fetch("/api/invite/create", {
+    const response = await $fetch("/api/invites/create", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -44,9 +44,9 @@ async function sendInvites() {
     return;
   }
   try {
-    const response = await $fetch(`/api/email/invite/${inviteId}`, {
+    const response = await $fetch(`/api/email/invites/${inviteId}`, {
       method: "POST",
-      body: JSON.stringify(emails),
+      body: emails,
       headers: {
         "Content-Type": "application/json",
       },
@@ -85,7 +85,7 @@ fetchWorkshops();
         
 
         <UFormField label="Foglalkozás" name="workshop">
-          <UInputMenu v-model="state.workshopText" :items="items" placeholder="Válassz foglalkozást"/>
+          <USelectMenu v-model="state.workshopText" :items="items" placeholder="Válassz foglalkozást"/>
         </UFormField>
         <UFormField label="Email küldése" name="sendEmails">
           <UCheckbox v-model="state.sendEmails"/>
