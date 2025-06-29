@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import * as z from "zod";
-import type { Workshop } from "~/server/types/types";
+import type { InviteStored, Workshop } from "~/server/types/types";
 const open = ref(false);
 
 const state = ref({
@@ -28,8 +28,9 @@ async function submitInvite() {
       headers: {
         "Content-Type": "application/json",
       },
-    });
+    }) as InviteStored;
     console.log("Invite created:", response);
+    inviteId = response.id
     if (state.value.sendEmails) {
       sendInvites()
     }

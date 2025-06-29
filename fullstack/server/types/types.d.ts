@@ -4,15 +4,21 @@ export interface Workshop {
   town: string;
   location: string | null;
   time: string | Date; // ISO 8601 format including time within day
-  participants: Array<string>; // emails of participants linking to User
+  participants: Array<Participant>; // emails and confirmed status of participants
   open: boolean;
   teachers: Array<string>;
   invites?: Array<string>;
 }
+export interface Participant {
+  email: string; // connecting to the stored User
+  confirmed: boolean; // whether the participant has confirmed their participation
+}
 export interface SecureSessionData {
+  // Used for handling session data conveniently
   apiToken: string;
 }
 export interface SessionData {
+  // Used for handling session data conveniently
   name: string;
 }
 export interface Teacher {
@@ -46,5 +52,5 @@ export interface User {
   // user type for participants
   email: string;
   name?: string;
-  workshops: Array<string>;
+  workshops: Array<string>; // workshopIds the user was invited to (might not be confirmed)
 }
