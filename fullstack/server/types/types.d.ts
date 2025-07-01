@@ -10,6 +10,7 @@ export interface Workshop {
   invites?: Array<string>;
 }
 export interface Participant {
+  name: string; // name of the participant (not the parent/user)
   email: string; // connecting to the stored User
   confirmed: boolean; // whether the participant has confirmed their participation
 }

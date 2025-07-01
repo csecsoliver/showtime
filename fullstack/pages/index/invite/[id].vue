@@ -18,7 +18,6 @@ let workshop: Workshop = {
   teachers: [],
 };
 const sent = ref(false);
-const sent = ref(false);
 const state = ref({
   email: "",
   code: "",
