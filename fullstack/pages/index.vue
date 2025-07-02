@@ -16,7 +16,7 @@
         </nav>
       </header>
     </div>
-    <NuxtPage />
+    <NuxtPage class="px-8" />
   </div>
 </template>
 

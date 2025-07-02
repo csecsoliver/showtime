@@ -13,16 +13,16 @@
           placeholder="Add meg az email címed"
           :disabled="sent"
         />
+        <UButton class="mx-3" :disabled="sent" @click="mail"> Email küldése </UButton>
       </UFormField>
-      <UButton :disabled="sent" @click="mail"> Email küldése </UButton>
       <UFormField label="Megerősítő köd" name="code">
         <UInput
           v-model="state.code"
           placeholder="Add meg az emailben kapott kódot"
           :disabled="!sent"
         />
+        <UButton class="mx-3" :disabled="!sent" @click="verify"> Megerősítés </UButton>
       </UFormField>
-      <UButton :disabled="!sent" @click="verify"> Megerősítés </UButton>
     </UForm>
   </div>
 </template>
