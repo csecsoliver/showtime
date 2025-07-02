@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
     console.log(await transporter().sendMail({
       from: "showtime.coe@gmail.com",
       to: e,
-      subject: `Meghívó foglalkozásre ${sessionData.name} által`,
+      subject: `Meghívó foglalkozásra ${sessionData.name} által`,
       text: `Meghívót kaptál a foglalkozásra. Kérlek, használd az alábbi linket a meghívó megtekintéséhez:\n\nhttps://show-time.ddns.net/invite/${invite.id}\n\nÜdvözlettel,\n${sessionData.name}`,
     }));
     workshops.setItem(invite.workshopId, {
@@ -66,13 +66,23 @@ export default defineEventHandler(async (event) => {
         } as Participant
       ]
     });
-    users.setItem(e, {
-      ...await users.getItem(e) as User,
-      workshops: [
-        ...(await users.getItem(e) as User).workshops,
-        invite.workshopId
-      ]
-    });
+    if (await users.hasItem(e)) {
+
+      users.setItem(e, {
+        ...await users.getItem(e) as User,
+        workshops: [
+          ...(await users.getItem(e) as User).workshops,
+          invite.workshopId
+        ]
+      });
+    } else {
+      users.setItem(e, {
+        email: e,
+        workshops: [
+          invite.workshopId
+        ]
+      });
+    }
 
   }
 });

@@ -1,9 +1,13 @@
 import { createStorage } from "unstorage";
 import fsDriver from "unstorage/drivers/fs";
+import codes from "~/server/plugins/codes";
 import transporter from "~/server/plugins/email";
-import type { InviteStored, SessionData } from "~/server/types/types";
+import type { InviteStored } from "~/server/types/types";
 const invites = createStorage({
   driver: fsDriver({ base: "./invites" }),
+});
+const users = createStorage({
+  driver: fsDriver({ base: "./users" }),
 });
 export default defineEventHandler(async (event) => {
   const body = (await readBody(event)) as string;
@@ -12,7 +16,7 @@ export default defineEventHandler(async (event) => {
       event,
       createError({
         statusCode: 400,
-        statusMessage: "Invalid request body",
+        statusMessage: "Invalid request body, you need an email address",
       })
     );
     return;
@@ -39,13 +43,19 @@ export default defineEventHandler(async (event) => {
       })
     );
   }
-
+  if (!(await users.hasItem(body))) {
+    users.setItem(body, {
+      email: body,
+      workshops: [invite.workshopId],
+    });
+  }
+  const token = codes("gen", body);
   console.log(
     await transporter().sendMail({
       from: "showtime.coe@gmail.com",
-      to: "",
-      subject: `Megerősítő kód`,
-      text: ``,
+      to: body,
+      subject: `Megerősítő kód - ${token}`,
+      text: `A megerősítő kódod: ${token}`,
     })
   );
 });

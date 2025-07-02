@@ -45,7 +45,7 @@ async function sendInvites() {
     return;
   }
   try {
-    const response = await $fetch(`/api/email/invites/${inviteId}`, {
+    const response = await $fetch(`/api/email/invite/${inviteId}`, {
       method: "POST",
       body: emails,
       headers: {

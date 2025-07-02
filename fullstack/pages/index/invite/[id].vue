@@ -18,6 +18,7 @@ let workshop: Workshop = {
   teachers: [],
 };
 const sent = ref(false);
+const done = ref(false);
 const state = ref({
   email: "",
   code: "",
@@ -61,8 +62,8 @@ init();
       }}
       dátumú Ciklus-show foglalkozásra
     </h2>
-    <p>Részletes adatok megtekintéséhez kérjük erősítse meg email címét.</p>
     <UForm :schema="schema" :state="state" class="flex flex-col gap-4" :v-if="!done" >
+      <p>Részletes adatok megtekintéséhez kérjük erősítse meg email címét.</p>
       <UFormField label="Email" name="email">
         <UInput v-model="state.email" placeholder="Add meg az email címed" :disabled="sent"/>
       </UFormField>
@@ -76,5 +77,8 @@ init();
       </UFormField>
       <UButton :disabled="!sent" @click="verify"> Megerősítés </UButton>
     </UForm>
+    <div :v-if="done">
+
+    </div>
   </div>
 </template>

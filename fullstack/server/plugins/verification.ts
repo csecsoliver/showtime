@@ -10,6 +10,7 @@ const tokens: { [key: string]: TokenData } = {
     expiry: Date.parse("2026-05-18T00:00:00.000Z"),
   },
 };
+// this handles the participnt user's api tokens
 export default function verification(option: string, param: string) {
   switch (option) {
     case "gen": {

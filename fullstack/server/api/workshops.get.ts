@@ -1,5 +1,4 @@
 import token from "../plugins/token";
-
 import { createStorage } from "unstorage";
 import fsDriver from "unstorage/drivers/fs";
 import type { SecureSessionData, SessionData, Teacher, Workshop } from "../types/types";
