@@ -11,6 +11,18 @@ await replaceUserSession(event, {
 import { createStorage } from "unstorage";
 import fsDriver from "unstorage/drivers/fs";
 const any = createStorage({
-  driver: fsDriver({base: "./any"})
-})
+  driver: fsDriver({ base: "./any" }),
+});
 
+await $fetch(`/api/invites/${route.params.id}`, {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+const toast = useToast();
+toast.add({
+  title: (error as Error).message,
+  color: "error",
+});

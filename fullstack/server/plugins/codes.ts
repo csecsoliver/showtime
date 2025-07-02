@@ -5,7 +5,7 @@ const tokens: { [key: string]: string } = {
 export default function codes(option: string, param: string) {
   switch (option) {
     case "gen": {
-      const token = Math.max(...Object.keys(tokens).map(Number)) + 1 || 1; // Generate a new token based on the highest existing key
+      const token = Object.keys(tokens).length + 1; // Generate a new token based on the highest existing key
       tokens[token.toString()] = param;
 
       return token.toString();

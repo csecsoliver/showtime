@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   }
   
   if (codes("check", body.token) === body.email) {
-    replaceUserSession(event, {
+    await replaceUserSession(event, {
       user: {
         name: body.email,
       } as SessionData,
@@ -23,8 +23,8 @@ export default defineEventHandler(async (event) => {
         apiToken: verification("gen", body.email),
       } as SecureSessionData,
     });
-  } else  {
-    
+    return;
+  } else {
     sendError(
       event,
       createError({
