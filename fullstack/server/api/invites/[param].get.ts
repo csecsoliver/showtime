@@ -36,16 +36,16 @@ export default defineEventHandler(async (event) => {
     );
     return;
   }
+  const workshop = (await workshops.getItem(invite.workshopId)) as Workshop;
   if (event.context.userType !== "user") {
     const data = {
       id: invite.id,
       invitor: invite.invitor,
-      date: ((await workshops.getItem(invite.workshopId)) as Workshop).time,
+      date: workshop.time,
     } as InviteBasic;
     console.log(data);
     return data;
-  } else {
-    const workshop = (await workshops.getItem(invite.workshopId)) as Workshop;
+  } else if (workshop.participants.find((part) => part.email === event.context.user.email)) {
     const teacher = (await teachers.getItem(invite.invitor)) as Teacher;
     teacher.password = undefined; // Do not send password back
     // teacher.salt = undefined; // Do not send salt back

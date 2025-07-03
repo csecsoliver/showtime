@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import * as z from "zod";
 import type { InviteStored, Workshop } from "~/server/types/types";
-const open = ref(false);
 
 const state = ref({
   workshopText: "",
@@ -32,8 +31,9 @@ async function submitInvite() {
     console.log("Invite created:", response);
     inviteId = response.id
     if (state.value.sendEmails) {
-      sendInvites()
+      await sendInvites()
     }
+    location.reload();
   } catch (error) {
     console.error("Error creating invite:", error);
   }
@@ -98,7 +98,7 @@ fetchWorkshops();
             placeholder= "Példa: email@example.com, email2@example.com"
           />
         </UFormField>
-        <UButton type="submit"> Submit </UButton>
+        <UButton type="submit"  class="button"> Submit </UButton>
       </UForm>
     </template>
   </UModal>

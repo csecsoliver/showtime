@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import type { InviteBasic, InviteDetails, Teacher, Workshop } from "~/server/types/types";
+import type {
+  InviteBasic,
+  InviteDetails,
+  Participant,
+  SessionData,
+  Teacher,
+  Workshop,
+} from "~/server/types/types";
 
 const route = useRoute();
 if (route.params.id.length < 1) {
@@ -19,9 +26,11 @@ const workshop: Ref<Workshop> = ref({
 const teacher: Ref<Teacher> = ref({
   // user type for teachers
   email: "",
-  workshops: []
-})
+  workshops: [],
+});
+const user = ref((useUserSession().user.value as SessionData)?.name);
 const authState = ref(false);
+const name = ref("");
 async function init() {
   const response: InviteBasic | InviteDetails = await $fetch(
     `/api/invites/${route.params.id}`,
@@ -37,21 +46,44 @@ async function init() {
     console.log(invitor);
     date.value = new Date(response.date);
     authState.value = false;
-    console.log("unathenticated")
-  } else if ("teacher" in response && "workshop" in response && "email" in response) {
+    console.log("unathenticated");
+  } else if (
+    "teacher" in response &&
+    "workshop" in response &&
+    "email" in response
+  ) {
     invitor.value = response.teacher.name ?? response.teacher.email;
     date.value = new Date(response.workshop.time);
     authState.value = true;
     workshop.value = response.workshop;
     teacher.value = response.teacher;
-    console.log("athenticated")
+    user.value = (useUserSession().user.value as SessionData).name;
+
+    console.log("athenticated");
   }
 }
-
+async function confirmParticipation() {
+  const response: Participant = await $fetch(
+    `/api/invites/confirm/${route.params.id}`,
+    {
+      method: "POST",
+      body: {
+        email: user.value,
+        name: name.value,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  workshop.value.participants.push(response);
+  console.log("confirmed participation", response);
+}
 init();
 </script>
 <template>
   <div>
+    
     <div v-if="!authState.valueOf()">
       <h2>
         {{ invitor }} meghívta a
@@ -64,9 +96,10 @@ init();
         }}
         dátumú Ciklus-show foglalkozásra
       </h2>
-      <VerifyEmail/>
+      <VerifyEmail />
     </div>
     <div v-if="authState.valueOf()">
+      <AuthState />
       <h2>
         {{ invitor }} meghívta a
         {{
@@ -75,21 +108,47 @@ init();
             month: "long",
             day: "numeric",
             hour: "numeric",
-            minute: "numeric"
+            minute: "numeric",
           })
         }}
-        idópontban tartandó Ciklus-show foglalkozásra. 
+        idópontban tartandó Ciklus-show foglalkozásra.
       </h2>
       <ul>
         <li>Foglalkozásvezető elérhetősége: {{ teacher.email }}</li>
-        <li>Foglalkozás helyszíne: {{ workshop.location??"Határozatlan" }}</li>
-        <li><span v-if="workshop.open">Nyílt foglalkozás</span><span v-else>Zártkörű foglalkozás</span></li>
-        <li>Résztvevők száma: {{ workshop.participants.filter(part => part.confirmed).length }}</li>
-        
+        <li>
+          Foglalkozás helyszíne: {{ workshop.location ?? "Határozatlan" }}
+          {{ workshop.town }}
+        </li>
+        <li>
+          <span v-if="workshop.open">Nyílt foglalkozás</span
+          ><span v-else8>Zártkörű foglalkozás</span>
+        </li>
+        <li>
+          Megerősített résztvevők száma:
+          {{ workshop.participants.filter((part) => part.confirmed).length }}
+        </li>
+        <li>
+          Ön által megerősített résztvevők:
+          <span
+            v-for="part in workshop.participants.filter(
+              (part) => part.email === user && part.confirmed
+            )"
+            :key="part.name"
+          >
+            {{ part.name }}, 
+          </span>
+        </li>
       </ul>
-      
-      
+      <UFormField label="Résztvevő megerősítése" name="code">
+        <UInput v-model="name" placeholder="Részvevő neve" />
+
+        <UButton
+          class="button"
+          @click="confirmParticipation"
+        >
+          Részvétel megerősítése
+        </UButton>
+      </UFormField>
     </div>
   </div>
-  
 </template>

@@ -1,0 +1,100 @@
+import fsDriver from "unstorage/drivers/fs";
+import { createStorage } from "unstorage";
+import type { InviteBasic, InviteDetails, InviteStored, Teacher, Workshop } from "~/server/types/types";
+const invites = createStorage({
+  driver: fsDriver({ base: "./invites/" }),
+});
+const workshops = createStorage({
+  driver: fsDriver({ base: "./workshops/" }),
+});
+const teachers = createStorage({
+  driver: fsDriver({ base: "./teachers/" }),
+});
+export default defineEventHandler(async (event) => {
+  if (!getRouterParam(event, "param")) {
+    sendError(
+      event,
+      createError({
+        statusCode: 404,
+        statusMessage: "Missing parameter",
+      })
+    );
+  }
+  const param: string = getRouterParam(event, "param") as string;
+  console.log(`Fetching invite with ID: ${param}`);
+  const invite: InviteStored | null = (await invites.getItem(
+    param as string
+  )) as InviteStored | null;
+  console.log(`Invite found: ${invite}`);
+  if (!invite) {
+    sendError(
+      event,
+      createError({
+        statusCode: 404,
+        statusMessage: "Invite not found",
+      })
+    );
+    return;
+  }
+  const body = (await readBody(event)) as {name: string, email: string};
+  if (typeof body !== "object" || !body || !body.email || !body.name) {
+    sendError(
+      event,
+      createError({
+        statusCode: 400,
+        statusMessage: "Invalid request body, you need \"email\", \"name\"",
+      })
+    );
+    return;
+  }
+
+  const workshop = (await workshops.getItem(invite.workshopId)) as Workshop;
+
+  for (let index = 0; index < workshop.participants.length; index++) {
+    const participant = workshop.participants[index];
+    if (participant.email === body.email) {
+      if (!participant.name) {
+        workshop.participants[index].name = body.name;
+        workshop.participants[index].confirmed = true;
+        await workshops.setItem(invite.workshopId, workshop);
+        return workshop.participants[index];
+      } else if (participant.name !== body.name) {
+        workshop.participants.push({
+          email: body.email,
+          name: body.name,
+          confirmed: true,
+        });
+        await workshops.setItem(invite.workshopId, workshop);
+        return workshop.participants[workshop.participants.length - 1];
+      } else {
+        sendError(
+          event,
+          createError({
+            statusCode: 403,
+            statusMessage: "You have already confirmed your participation",
+          })
+        );
+        return;
+      }
+    }
+  }
+  if (workshop.open) {
+    workshop.participants.push({
+      email: body.email,
+      name: body.name,
+      confirmed: true,
+    });
+    await workshops.setItem(invite.workshopId, workshop);
+    return workshop.participants[workshop.participants.length - 1];
+  } else {
+    sendError(
+      event,
+      createError({
+        statusCode: 403,
+        statusMessage: "Workshop is not open for new participants",
+      })
+    );
+    return;
+  }
+
+});

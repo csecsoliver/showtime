@@ -21,6 +21,7 @@ async function submitWorkshop() {
       },
     });
     console.log('Workshop created:', response);
+    location.reload();
   } catch (error) {
     console.error('Error creating workshop:', error);
   }

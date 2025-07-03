@@ -13,7 +13,7 @@
           placeholder="Add meg az email címed"
           :disabled="sent"
         />
-        <UButton class="mx-3" :disabled="sent" @click="mail"> Email küldése </UButton>
+        <UButton  class="button" :disabled="sent" @click="mail"> Email küldése </UButton>
       </UFormField>
       <UFormField label="Megerősítő köd" name="code">
         <UInput
@@ -21,7 +21,7 @@
           placeholder="Add meg az emailben kapott kódot"
           :disabled="!sent"
         />
-        <UButton class="mx-3" :disabled="!sent" @click="verify"> Megerősítés </UButton>
+        <UButton class="button" :disabled="!sent" @click="verify"> Megerősítés </UButton>
       </UFormField>
     </UForm>
   </div>
@@ -69,6 +69,7 @@ async function verify() {
       body: {email: state.value.email, token: state.value.code},
     });
     done.value = true;
+    location.reload();
   } catch (error) {
     toast.add({
       title: (error as Error).message,
