@@ -100,7 +100,7 @@ init();
     </div>
     <div v-if="authState.valueOf()">
       <AuthState />
-      <h2>
+      <h2 class="font-bold">
         {{ invitor }} meghívta a
         {{
           date.toLocaleDateString("hu-HU", {
@@ -121,7 +121,7 @@ init();
         </li>
         <li>
           <span v-if="workshop.open">Nyílt foglalkozás</span
-          ><span v-else8>Zártkörű foglalkozás</span>
+          ><span v-else>Zártkörű foglalkozás</span>
         </li>
         <li>
           Megerősített résztvevők száma:
@@ -139,14 +139,15 @@ init();
           </span>
         </li>
       </ul>
-      <UFormField label="Résztvevő megerősítése" name="code">
+      
+      <UFormField class="my-3" label="Részvétel megerősítése" name="code">
         <UInput v-model="name" placeholder="Részvevő neve" />
 
         <UButton
           class="button"
           @click="confirmParticipation"
         >
-          Részvétel megerősítése
+          Megerősítés
         </UButton>
       </UFormField>
     </div>
