@@ -1,6 +1,7 @@
 import fsDriver from "unstorage/drivers/fs";
 import { createStorage } from "unstorage";
-import type { InviteBasic, InviteDetails, InviteStored, Teacher, Workshop } from "~/server/types/types";
+import transporter from "~/server/plugins/email";
+import type { InviteStored, Teacher, Workshop } from "~/server/types/types";
 const invites = createStorage({
   driver: fsDriver({ base: "./invites/" }),
 });
@@ -36,17 +37,18 @@ export default defineEventHandler(async (event) => {
     );
     return;
   }
-  const body = (await readBody(event)) as {name: string, email: string};
+  const body = (await readBody(event)) as { name: string; email: string };
   if (typeof body !== "object" || !body || !body.email || !body.name) {
     sendError(
       event,
       createError({
         statusCode: 400,
-        statusMessage: "Invalid request body, you need \"email\", \"name\"",
+        statusMessage: 'Invalid request body, you need "email", "name"',
       })
     );
     return;
   }
+  const teacher = (await teachers.getItem(invite.invitor)) as Teacher;
 
   const workshop = (await workshops.getItem(invite.workshopId)) as Workshop;
 
@@ -57,6 +59,13 @@ export default defineEventHandler(async (event) => {
         workshop.participants[index].name = body.name;
         workshop.participants[index].confirmed = true;
         await workshops.setItem(invite.workshopId, workshop);
+        await transporter().sendMail({
+          from: "showtime.coe@gmail.com",
+          to: teacher.email,
+          subject: `Új résztvevő - ${body.name}`,
+          text: `${body.email} megerősítette ${body.name} részvételét.`,
+        });
+
         return workshop.participants[index];
       } else if (participant.name !== body.name) {
         workshop.participants.push({
@@ -65,6 +74,12 @@ export default defineEventHandler(async (event) => {
           confirmed: true,
         });
         await workshops.setItem(invite.workshopId, workshop);
+        await transporter().sendMail({
+          from: "showtime.coe@gmail.com",
+          to: teacher.email,
+          subject: `Új résztvevő - ${body.name}`,
+          text: `${body.email} megerősítette ${body.name} részvételét.`,
+        });
         return workshop.participants[workshop.participants.length - 1];
       } else {
         sendError(
@@ -85,6 +100,12 @@ export default defineEventHandler(async (event) => {
       confirmed: true,
     });
     await workshops.setItem(invite.workshopId, workshop);
+    await transporter().sendMail({
+      from: "showtime.coe@gmail.com",
+      to: teacher.email,
+      subject: `Új résztvevő - ${body.name}`,
+      text: `${body.email} kezdeményezte ${body.name} részvételét.`,
+    });
     return workshop.participants[workshop.participants.length - 1];
   } else {
     sendError(
@@ -96,5 +117,4 @@ export default defineEventHandler(async (event) => {
     );
     return;
   }
-
 });

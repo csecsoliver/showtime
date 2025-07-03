@@ -26,3 +26,12 @@ toast.add({
   title: (error as Error).message,
   color: "error",
 });
+
+
+import transporter from "~/server/plugins/email";
+await transporter().sendMail({
+  from: "showtime.coe@gmail.com",
+  to: teacher.email,
+  subject: `Új résztvevő - ${body.name}`,
+  text: `${body.email} megerősítette ${body.name} részvételét.`,
+});
