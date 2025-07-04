@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: code-server
+  template:
+    metadata:
+      labels:
+        app: code-server
+    spec:
+      containers:
+        - name: code-server
+          image: lscr.io/linuxserver/code-server:latest
+          ports:
+            - containerPort: 8443
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Etc/CET"
+            - name: PASSWORD
+              value: "password"
+            # - name: HASHED_PASSWORD
+            #   value: ""
+            - name: SUDO_PASSWORD
+              value: "password"
+            # - name: SUDO_PASSWORD_HASH
+            #   value: ""
+            # - name: PROXY_DOMAIN
+            #   value: "code-server.my.domain"
+            # - name: DEFAULT_WORKSPACE
+            #   value: "/config/workspace"
+            # - name: PWA_APPNAME
+            #   value: "code-server"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          hostPath:
+            path: /path/to/code-server/config
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: code-server
+spec:
+  type: NodePort
+  ports:
+    - port: 8443
+      targetPort: 8443
+      nodePort: 30843
+  selector:
+    app: code-server

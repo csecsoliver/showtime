@@ -1,11 +1,11 @@
 const tokens: { [key: string]: string } = {
-  "87": "admin"
+  "1": "admin"
 };
 // this handles the participant user's email verification codes
 export default function codes(option: string, param: string) {
   switch (option) {
     case "gen": {
-      const token = Object.keys(tokens).length + Math.round(Math.random()*100); // Generate a new token based on the highest existing key
+      const token = Number(Object.keys(tokens)[Object.keys(tokens).length - 1]) + Math.round(Math.random()*100); // Generate a new token based on the highest existing key
       tokens[token.toString()] = param;
       Object.entries(tokens).forEach(([key, value]) => {
         if (key !== token.toString() && value === param) {

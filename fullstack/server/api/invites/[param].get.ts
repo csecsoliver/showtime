@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     return;
   }
   const workshop = (await workshops.getItem(invite.workshopId)) as Workshop;
-  if (event.context.userType !== "user") {
+  if (event.context.userType !== "user" || workshop.open) {
     const data = {
       id: invite.id,
       invitor: invite.invitor,
@@ -57,5 +57,14 @@ export default defineEventHandler(async (event) => {
     } as InviteDetails;
     console.log(data);
     return data;
+  } else {
+    sendError(
+      event,
+      createError({
+        statusCode: 401,
+        statusMessage: "unauthorized",
+      })
+    );
+    return;
   }
 });

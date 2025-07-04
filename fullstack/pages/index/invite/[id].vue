@@ -108,10 +108,10 @@ init();
             month: "long",
             day: "numeric",
             hour: "numeric",
-            minute: "numeric",
+            minute: "numeric", 
           })
         }}
-        idópontban tartandó Ciklus-show foglalkozásra.
+        időpontban tartandó Ciklus-show foglalkozásra.
       </h2>
       <ul>
         <li>Foglalkozásvezető elérhetősége: {{ teacher.email }}</li>
