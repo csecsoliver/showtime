@@ -1,62 +1,61 @@
+
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: code-server
+  name: vscodium
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: code-server
+      app: vscodium
   template:
     metadata:
       labels:
-        app: code-server
+        app: vscodium
     spec:
       containers:
-        - name: code-server
-          image: lscr.io/linuxserver/code-server:latest
-          ports:
-            - containerPort: 8443
+        - name: vscodium
+          image: lscr.io/linuxserver/vscodium:latest
           env:
             - name: PUID
               value: "1000"
             - name: PGID
               value: "1000"
             - name: TZ
-              value: "Etc/CET"
-            - name: PASSWORD
-              value: "password"
-            # - name: HASHED_PASSWORD
-            #   value: ""
-            - name: SUDO_PASSWORD
-              value: "password"
-            # - name: SUDO_PASSWORD_HASH
-            #   value: ""
-            # - name: PROXY_DOMAIN
-            #   value: "code-server.my.domain"
-            # - name: DEFAULT_WORKSPACE
-            #   value: "/config/workspace"
-            # - name: PWA_APPNAME
-            #   value: "code-server"
+              value: Etc/CET
+          ports:
+            - containerPort: 80
+            - containerPort: 81
           volumeMounts:
-            - name: config
+            - name: vscodium-config
               mountPath: /config
+          securityContext:
+            capabilities:
+              add: ["IPC_LOCK"]
+            seccompProfile:
+              type: Unconfined
+          resources:
+            limits:
+              shm: 1Gi
       volumes:
-        - name: config
+        - name: vscodium-config
           hostPath:
-            path: /path/to/code-server/config
+            path: /vscodium
             type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: code-server
+  name: vscodium
 spec:
-  type: NodePort
-  ports:
-    - port: 8443
-      targetPort: 8443
-      nodePort: 30843
   selector:
-    app: code-server
+    app: vscodium
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+    - protocol: TCP
+      port: 81
+      targetPort: 81
+  type: ClusterIP

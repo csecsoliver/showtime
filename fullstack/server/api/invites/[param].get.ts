@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     return;
   }
   const workshop = (await workshops.getItem(invite.workshopId)) as Workshop;
-  if (event.context.userType !== "user" || workshop.open) {
+  if (event.context.userType !== "user") {
     const data = {
       id: invite.id,
       invitor: invite.invitor,
@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
     } as InviteBasic;
     console.log(data);
     return data;
-  } else if (workshop.participants.find((part) => part.email === event.context.user.email)) {
+  } else if (workshop.participants.find((part) => part.email === event.context.user.email) || workshop.open) {
     const teacher = (await teachers.getItem(invite.invitor)) as Teacher;
     teacher.password = undefined; // Do not send password back
     // teacher.salt = undefined; // Do not send salt back

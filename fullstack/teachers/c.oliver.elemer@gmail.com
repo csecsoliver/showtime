@@ -1,0 +1,1 @@
+{"email":"c.oliver.elemer@gmail.com","workshops":["12","13"],"password":"$2b$12$4AXgecfvFIVcApDhECwqo.LE4moAR8Spr6fnlvLOOEJzCZYACe0ka"}
