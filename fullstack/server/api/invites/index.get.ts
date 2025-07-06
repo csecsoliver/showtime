@@ -4,6 +4,7 @@ import type {
   InviteBasic,
   InviteDetails,
   InviteStored,
+  Teacher,
   Workshop,
 } from "~/server/types/types";
 
