@@ -10,6 +10,14 @@ const props = defineProps<{
   id: string;
 }>();
 
+const state = ref({
+  town: "",
+  time: "",
+  open: false,
+  location: "",
+  participants: [],
+  
+});
 const workshop: Ref<Workshop> = ref({
   id: props.id,
   town: "",
@@ -53,16 +61,16 @@ async function submitWorkshop() {
 
   try {
     console.log("Submitting workshop data:", data);
-    const response = await $fetch("/api/workshop", {
+    const response = await $fetch("/api/edit_workshop", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    console.log("Workshop created:", response);
+    console.log("Workshop edited:", response);
   } catch (error) {
-    console.error("Error creating workshop:", error);
+    console.error("Error editing workshop:", error);
   }
 }
 refresh();
@@ -113,6 +121,21 @@ refresh();
         </div>
         <button type="submit" class="button">Mentés</button>
       </form>
+      <UForm :schema="schema" :state="state" class="flex flex-col gap-4">
+        <UFormField>
+          <UInput v-model="town" label="Város" name="town" required />
+        </UFormField>
+        <UFormField>
+          <UInput v-model="location" label="Helyszín" name="location" />
+        </UFormField>
+        <UFormField>
+          <UInput v-model="date" label="Dátum" name="date" type="datetime-local" required />
+        </UFormField>
+        <UFormField>
+          <UCheckbox v-model="open" label="Nyílt foglalkozás" name="open" />
+        </UFormField>
+
+      </UForm>
     </template>
   </UModal>
 </template>

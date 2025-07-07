@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
       statusMessage: "unauthorized",
     });
   }
-  const body: {id: string, date: Date, town: string, open: string,location:string} = await readBody(
+  const body: {id: string, time: string, town: string, open: string,location:string} = await readBody(
     event
   );
   
@@ -34,11 +34,11 @@ export default defineEventHandler(async (event) => {
   const workshop: Workshop = {
     id: body.id,
     town: body.town,
-    location: null,
-    time: body.date,
-    participants: [],
+    location: body.location,
+    time: body.time,
+    participants: (await storage.getItem(body.id.toString()) as Workshop)?.participants || [],
     open: body.open == "on" ? true : false,
-    teachers: [sessionData.name],
+    teachers: (await storage.getItem(body.id.toString()) as Workshop)?.teachers || [],
   };
   await storage.setItem(workshop.id.toString(), workshop);
   return { id: workshop.id, message: "Workshop edited successfully" };
