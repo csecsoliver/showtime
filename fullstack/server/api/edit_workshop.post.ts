@@ -26,26 +26,25 @@ export default defineEventHandler(async (event) => {
       statusMessage: "unauthorized",
     });
   }
-  const body: {id: string, time: string, town: string, open: string,location:string} = await readBody(
+  const body: {id: string, time: string, town: string, open: boolean, location: string} = await readBody(
     event
   );
-  
-  
+  if (!(await storage.getItem(body.id.toString()) as Workshop)?.teachers.includes(sessionData.name)) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "forbidden",
+    });
+  }
   const workshop: Workshop = {
     id: body.id,
     town: body.town,
     location: body.location,
     time: body.time,
-<<<<<<< HEAD
-    participants: (await storage.getItem(body.id) as Workshop)?.participants || [],
-    open: body.open == "on" ? true : false,
-    teachers: (await storage.getItem(body.id) as Workshop)?.teachers || [],
-=======
     participants: (await storage.getItem(body.id.toString()) as Workshop)?.participants || [],
-    open: body.open == "on" ? true : false,
+    open: body.open,
     teachers: (await storage.getItem(body.id.toString()) as Workshop)?.teachers || [],
->>>>>>> 7cf176b05c9bbab8bb538c22147b2f078ecb8bee
   };
+  console.log(workshop);
   await storage.setItem(workshop.id.toString(), workshop);
   return { id: workshop.id, message: "Workshop edited successfully" };
 });

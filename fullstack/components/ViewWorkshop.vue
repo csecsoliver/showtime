@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+import z from "zod";
 import type { Participant, Workshop } from "~/server/types/types";
 const toast = useToast();
 
@@ -12,7 +13,17 @@ const state = ref({
   time: Date.now().toString(),
   open: false,
   location: "",
-  participants: [] as Participant[],
+  participants: [] as Participant[]
+});
+const schema = z.object({
+  town: z.string().min(2).max(100),
+  time: z.string().datetime(),
+  open: z.boolean(),
+  location: z.string().max(200).optional(),
+  participants: z.array(z.object({
+    name: z.string().min(2).max(100),
+    email: z.string().email(),
+  })),
 });
 const workshopid = ref('');
 async function refresh() {
@@ -37,7 +48,7 @@ async function refresh() {
   state.value.location = workshop.location ?? "";
   state.value.open = workshop.open;
   state.value.participants = workshop.participants || [];
-  console.log("Workshop data:", state.value);
+  console.log("Workshop data for editing:", state.value);
 }
 
 async function submitWorkshop() {
@@ -49,17 +60,18 @@ async function submitWorkshop() {
     open: state.value.open,
     participants: state.value.participants,
   };
+  console.log("Submitting workshop data:", workshop);
 
   try {
     console.log("Submitting workshop data:", workshop);
     await $fetch("/api/edit_workshop", {
       method: "POST",
-      body: JSON.stringify(workshop),
+      body: workshop,
       headers: {
         "Content-Type": "application/json",
       },
     });
-    location.reload();
+    // location.reload();
   } catch (error) {
     toast.add({
       title: (error as Error).message,
@@ -70,7 +82,7 @@ async function submitWorkshop() {
 async function removeParticipant(email: string) {
   if (window.confirm("Biztosan eltávolítod a résztvevőt?")) {
 
-    workshop.value.participants = workshop.value.participants.filter(
+    state.value.participants = state.value.participants.filter(
       (p) => p.email !== email
     );
   }
@@ -78,7 +90,7 @@ async function removeParticipant(email: string) {
 refresh();
 </script>
 <template>
-  <UModal title="Új foglalkozás létrehozása" size="sm">
+  <UModal title="Foglalkozás részletei" size="sm">
     <button class="button">Részletek</button>
 
     <template #body>
@@ -87,7 +99,7 @@ refresh();
           <UInput v-model="state.town" label="Város" name="town" required />
         </UFormField>
         <UFormField>
-          <UInput v-model="state.location" label="Helyszín" name="location" />
+          <UInput v-model="state.location" label="Helyszín" name="location" @click="console.log(state.open)"/>
         </UFormField>
         <UFormField>
           <UInput
@@ -103,6 +115,7 @@ refresh();
             v-model="state.open"
             label="Nyílt foglalkozás"
             name="open"
+            
           />
         </UFormField>
         <ul>
