@@ -26,8 +26,11 @@ toast.add({
   title: (error as Error).message,
   color: "error",
 });
-
-
+toast.add({
+  title:
+    "Hiba történt a foglalkozások betöltése során, jelentsd a fejlesztőknek.",
+  color: "error",
+});
 
 import provideEmailTransporter from "~/server/plugins/email";
 await provideEmailTransporter().sendMail({

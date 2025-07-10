@@ -13,8 +13,14 @@ export default defineEventHandler(async (event) => {
   if (event.context.userType !== "teacher") {
     throw createError({
       statusCode: 401,
-      statusMessage: "Unauthorized",
+      statusMessage: "unauthorized",
       message: "You must be logged in to update settings.",
+    });
+  }
+  if (!body || !body.function || !body.value) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "badRequest",
     });
   }
 
@@ -23,8 +29,7 @@ export default defineEventHandler(async (event) => {
     if (!old || !(typeof body.value === "string")) {
       throw createError({
         statusCode: 404,
-        statusMessage: "Not Found",
-        message: "User not found.",
+        statusMessage: "userNotFound",
       });
     }
     old.name = body.value as string;
@@ -34,15 +39,14 @@ export default defineEventHandler(async (event) => {
     if (!old || !(typeof body.value === "object" && "old" in body.value && "new" in body.value && "confirm" in body.value)) {
       throw createError({
         statusCode: 404,
-        statusMessage: "Not Found",
-        message: "User not found.",
+        statusMessage: "userNotFound",
       });
     }
     if ((await userManipulate("checkpass", event.context.user.email, (body.value as { old: string; new: string; confirm: string; }).old))) {
       if ((body.value as { old: string; new: string; confirm: string; }).new !== (body.value as { old: string; new: string; confirm: string; }).confirm) {
         throw createError({
           statusCode: 400,
-          statusMessage: "noMatchError",
+          statusMessage: "passwordMismatch",
         });
       } else {
         if (body.value.new.length < 8 || body.value.new.length > 72) {

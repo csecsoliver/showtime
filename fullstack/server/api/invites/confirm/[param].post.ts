@@ -17,9 +17,19 @@ export default defineEventHandler(async (event) => {
       event,
       createError({
         statusCode: 404,
-        statusMessage: "Missing parameter",
+        statusMessage: "badRequest",
       })
     );
+  }
+  if (event.context.userType !== "user") {
+    sendError(
+      event,
+      createError({
+        statusCode: 401,
+        statusMessage: "unauthorized",
+      })
+    );
+    return;
   }
   const param: string = getRouterParam(event, "param") as string;
   console.log(`Fetching invite with ID: ${param}`);
@@ -32,7 +42,7 @@ export default defineEventHandler(async (event) => {
       event,
       createError({
         statusCode: 404,
-        statusMessage: "Invite not found",
+        statusMessage: "inviteNotFound",
       })
     );
     return;
@@ -43,14 +53,24 @@ export default defineEventHandler(async (event) => {
       event,
       createError({
         statusCode: 400,
-        statusMessage: 'Invalid request body, you need "email", "name"',
+        statusMessage: "badRequest",
+      })
+    );
+    return;
+  }
+  const workshop = (await workshops.getItem(invite.workshopId)) as Workshop;
+  if (workshop.participants.length >= 18) {
+    sendError(
+      event,
+      createError({
+        statusCode: 403,
+        statusMessage: "inviteClosedError",
       })
     );
     return;
   }
   const teacher = (await teachers.getItem(invite.invitor)) as Teacher;
 
-  const workshop = (await workshops.getItem(invite.workshopId)) as Workshop;
 
   for (let index = 0; index < workshop.participants.length; index++) {
     const participant = workshop.participants[index];
@@ -86,7 +106,7 @@ export default defineEventHandler(async (event) => {
           event,
           createError({
             statusCode: 403,
-            statusMessage: "You have already confirmed your participation",
+            statusMessage: "existsError",
           })
         );
         return;
@@ -112,7 +132,7 @@ export default defineEventHandler(async (event) => {
       event,
       createError({
         statusCode: 403,
-        statusMessage: "Workshop is not open for new participants",
+        statusMessage: "workshopClosedError",
       })
     );
     return;

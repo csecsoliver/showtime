@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { NuxtError } from "#app";
 import { ref } from "vue";
 const toast = useToast();
 const username = ref("");
@@ -30,14 +31,33 @@ async function handleLogin(): Promise<void> {
   try {
     await response;
   } catch (error) {
-    toast.add({
-      title: (error as Error).message,
-      color: "error",
-    });
-    document.getElementById("submit")?.classList.remove("loading");
-    loading.value = false;
-    return
+    switch ((error as NuxtError).statusMessage) {
+      case "userExistsError":
+        toast.add({
+          title: "Felhasználó már létezik ezzel az e-mail címmel",
+          color: "error",
+        });
+        break;
+      case "loginFailed":
+        toast.add({
+          title: "A felhasználónév vagy a jelszó hibás",
+          color: "error",
+        });
+        break;
+      case "passwordError":
+        toast.add({
+          title: "A jelszó nem felel meg a követelményeknek: min 8, max 72 karakter",
+          color: "error",
+        });
+        break;
+      default:
+        toast.add({
+          title: "Hiba történt, kérjük, jelentse a fejlesztőknek",
+          color: "error",
+        });
+    }
   }
+  loading.value = false;
   console.log("Login response:", response);
 
   // navigateTo('/dashboard');

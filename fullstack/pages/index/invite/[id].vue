@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { NuxtError } from "#app";
 import type {
   InviteBasic,
   InviteDetails,
@@ -63,16 +64,16 @@ async function init() {
 
       console.log("athenticated");
     }
-  } catch (error) {
+  } catch {
     exists.value = false;
     toast.add({
-      title: `Hiba történt a meghívó betöltése során: ${error}`,
+      title: `Hiba történt a meghívó betöltése során, kérjük, jelentsd a foglalkozásvezetőnek`,
       color: "error",
     });
   }
 }
 async function confirmParticipation() {
-  const response: Participant = await $fetch(
+  try {const response: Participant = await $fetch(
     `/api/invites/confirm/${route.params.id}`,
     {
       method: "POST",
@@ -86,7 +87,39 @@ async function confirmParticipation() {
     }
   );
   workshop.value.participants.push(response);
-  console.log("confirmed participation", response);
+  console.log("confirmed participation", response);} catch (error) {
+    switch ((error as NuxtError).statusMessage) {
+      case "inviteNotFound":
+        toast.add({
+          title: "Meghívó nem található, kérjük, töltse be újra az oldalt",
+          color: "error",
+        });
+        break;
+      case "existsError":
+        toast.add({
+          title: "Már megerősítette a részvételét",
+          color: "error",
+        });
+        break;
+      case "workshopClosedError":
+        toast.add({
+          title: "A workshophoz már nem lehet csatlakozni",
+          color: "error",
+        });
+        break;
+      case "unauthorized":
+        toast.add({
+          title: "Nincs jogosultsága, töltse be újra az oldalt",
+          color: "error",
+        });
+        break;
+      default:
+        toast.add({
+          title: "Hiba történt a mentés során, kérjük, jelentse a fejlesztőknek",
+          color: "error",
+        });
+    }
+  }
 }
 
 init();

@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
       event,
       createError({
         statusCode: 404,
-        statusMessage: "Missing parameter",
+        statusMessage: "badRequest",
       })
     );
   }
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
       event,
       createError({
         statusCode: 404,
-        statusMessage: "Invite not found",
+        statusMessage: "inviteNotFound",
       })
     );
     return;
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
       event,
       createError({
         statusCode: 404,
-        statusMessage: "Workshop not found",
+        statusMessage: "workshopNotFound",
       })
     );
     return;

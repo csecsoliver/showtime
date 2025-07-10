@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { NuxtError } from "#app";
 import { ref, reactive } from "vue";
 const toast = useToast();
 const state = reactive({ fullName: ref(""), password: reactive({ old: ref(""), new: ref(""), confirm: ref("") }) });
@@ -20,10 +21,37 @@ async function update(field: keyof typeof state) {
       color: "success",
     });
   } catch (error) {
-    toast.add({
-      title: "Hiba történt a mentés során: " + error,
-      color: "error",
-    });
+    switch ((error as NuxtError).statusMessage) {
+      case "userNotFound":
+        toast.add({
+          title: "Felhasználó nem található",
+          color: "error",
+        });
+        break;
+      case "passwordMismatch":
+        toast.add({
+          title: "A jelszavak nem egyeznek",
+          color: "error",
+        });
+        break;
+      case "passwordError":
+        toast.add({
+          title: "A jelszó nem felel meg a követelményeknek: min 8, max 72 karakter",
+          color: "error",
+        });
+        break;
+      case "unauthorized":
+        toast.add({
+          title: "Nincs jogosultsága, töltse be újra az oldalt",
+          color: "error",
+        });
+        break;
+      default:
+        toast.add({
+          title: "Hiba történt a mentés során, kérjük, jelentse a fejlesztőknek",
+          color: "error",
+        });
+    }
   }
 }
 </script>
