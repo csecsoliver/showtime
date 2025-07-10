@@ -1,50 +1,69 @@
+<script setup lang="ts">
+import { ref, reactive } from "vue";
+const toast = useToast();
+const state = reactive({ fullName: ref(""), password: reactive({ old: ref(""), new: ref(""), confirm: ref("") }) });
+
+
+
+
+async function update(field: keyof typeof state) {
+  try {
+    await $fetch("/api/settings", {
+      method: "POST",
+      body: { function: field, value: state[field] },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    toast.add({
+      title: "Sikeres mentés",
+      color: "success",
+    });
+  } catch (error) {
+    toast.add({
+      title: "Hiba történt a mentés során: " + error,
+      color: "error",
+    });
+  }
+}
+</script>
 <template>
-<main class="flex flex-wrap gap-4">
-  <div>
-    <h2>Beállítások</h2>
-    <ul>
-      <li>Example 1</li>
-    </ul>
-  </div>
-  <div>
-    <h2>Gyorsműveletek</h2>
-    <button class="button">Új foglalkozás</button>
-    <button class="button">Meghívók</button>
-  </div>
-  <div>
-    <h2>Profil</h2>
-    <button class="button">Profil szerkesztése</button>
-    <button class="button">Jelszó módosítása</button>
-    <button class="button">Profil törlése</button>
-  </div>
-  <div>
-    <h2>Fiók</h2>
-
-
-
-  </div>
-</main>
+  <main class="flex flex-wrap justify-center items-center mt-4">
+    
+    
+    <div>
+      <h2>Teljes Név</h2>
+      <UForm state="state.fullName" @submit="update('fullName')">
+        <UFormField>
+          <UInput v-model="state.fullName" placeholder="Teljes Név" name="fullName" type="text" required />
+        </UFormField>
+        <UButton type="submit" class="button">Mentés</UButton>
+      </UForm>
+    </div>
+    <div>
+      <h2>Jelszó</h2>
+      <UForm state="state.password" @submit="update('password')">
+        <UFormField>
+          <UInput v-model="state.password.old" placeholder="Korábbi jelszó" name="password" type="password" required />
+        </UFormField>
+        <UFormField>
+          <UInput v-model="state.password.new" placeholder="Új jelszó" name="password" type="password" required />
+        </UFormField>
+        <UFormField>
+          <UInput v-model="state.password.confirm" placeholder="Új jelszó megerősítése" name="password" type="password" required />
+        </UFormField>
+        <UButton type="submit" class="button">Mentés</UButton>
+      </UForm>
+    </div>
+  </main>
 </template>
 <style scoped>
-
 main > div {
   width: 30rem;
-  padding: 0.7rem 1rem;
+  padding: 0.2rem 0.5rem;
   margin: 0.5rem;
   border: 1px solid var(--sht-text);
   border-radius: 10px;
   height: fit-content;
-}
-.button {
-  margin-right: 1rem;
-  margin-bottom: 0.5rem;
-  width: fit-content;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-h2 {
-  font-weight: bold;
-  font-size: 1.25rem;
-  margin-bottom :0.5rem ;
 }
 </style>

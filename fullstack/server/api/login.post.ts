@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
       console.log(body);
       console.log(body.password?.length);
       
-      if (typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 72) {
+      if (typeof body.password === "string" && body.password.length >= 8 && body.password.length <= 72 && body.username?.length >= 3 && body.username?.length <= 32) {
         const hash = await bcrypt.hash(body.password, 12);
         if (!(await userManipulate("getpass", body.username))) {
           await userManipulate("makeuser", body.username, hash);

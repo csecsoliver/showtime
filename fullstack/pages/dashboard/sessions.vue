@@ -22,7 +22,6 @@ refresh();
     <table class="table-auto w-9/10">
       <thead>
         <tr><th colspan="4"><h2 @click="refresh()">Foglalkozások</h2></th></tr>
-        <tr/>
         <tr>
           <th style="width: 30%">Időpont</th>
           <th style="width: 20%">Helyszín</th>
@@ -38,8 +37,7 @@ refresh();
           <td>
             
             <ViewWorkshop :id="i.id" />
-            <button class="button">Megívó</button>
-            <button class="button">Lemondás</button>
+            <DeleteWorkshop :id="i.id" />
           </td>
         </tr>
       </tbody>

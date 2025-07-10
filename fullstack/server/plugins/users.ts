@@ -1,11 +1,14 @@
-
 import fsDriver from "unstorage/drivers/fs";
 import bcrypt from "bcrypt";
 import { createStorage } from "unstorage";
-import { Teacher } from "../types/types";
-export default async function userManipulate(option: string, username: string, passhash?: string) {
+import type { Teacher } from "../types/types";
+export default async function userManipulate(
+  option: string,
+  username: string,
+  pass?: string
+) {
   //should be rewritten for database usage
- //storage: key=username (email usually), value=json string  
+  //storage: key=username (email usually), value=json string
   const storage = createStorage({
     driver: fsDriver({ base: "./teachers/" }),
   });
@@ -31,28 +34,30 @@ export default async function userManipulate(option: string, username: string, p
         let str;
         if (typeof raw === "string") {
           str = JSON.parse(raw);
-        } else{
-            str = raw
+        } else {
+          str = raw;
         }
         if (str) {
-          return await bcrypt.compare(passhash??'', str.password);
+          return await bcrypt.compare(pass ?? "", str.password);
         }
       }
       return false;
     case "makeuser":
-        
-        return await storage.setItem(username, JSON.stringify(makeuser(username, passhash as string)));
+      return await storage.setItem(
+        username,
+        JSON.stringify(makeuser(username, pass as string))
+      );
     case "checkauth":
-        break;
+      break;
     default:
       break;
   }
 }
 function makeuser(username: string, passhash: string) {
-  const user:Teacher= {
+  const user: Teacher = {
     email: username,
     workshops: [],
     password: passhash,
-  }
-  return user
+  };
+  return user;
 }

@@ -57,7 +57,10 @@ button:active{
   background-color: var(--sht-pinkhighlight2);
 }
 
-
+h2 {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
 
 @media (min-width: 1024px) {
 

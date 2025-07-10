@@ -1,1 +1,1 @@
-{"email":"c.oliver.elemer@gmail.com","workshops":["12","13"],"password":"$2b$12$4AXgecfvFIVcApDhECwqo.LE4moAR8Spr6fnlvLOOEJzCZYACe0ka"}
+{"email":"c.oliver.elemer@gmail.com","workshops":[],"password":"$2b$12$LbIvIhsqCOzpfWvLu/Mg4O2NVWGEGrL1caQ9EkdwQbi26B0FJxgqi","name":"Csécs Olivéer XII. Elemér"}

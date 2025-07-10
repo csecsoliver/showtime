@@ -37,6 +37,16 @@ export default defineEventHandler(async (event) => {
     return;
   }
   const workshop = (await workshops.getItem(invite.workshopId)) as Workshop;
+  if (!workshop) {
+    sendError(
+      event,
+      createError({
+        statusCode: 404,
+        statusMessage: "Workshop not found",
+      })
+    );
+    return;
+  }
   if (event.context.userType !== "user") {
     const data = {
       id: invite.id,
@@ -47,8 +57,7 @@ export default defineEventHandler(async (event) => {
     return data;
   } else if (workshop.participants.find((part) => part.email === event.context.user.email) || workshop.open) {
     const teacher = (await teachers.getItem(invite.invitor)) as Teacher;
-    teacher.password = undefined; // Do not send password back
-    // teacher.salt = undefined; // Do not send salt back
+    teacher.password = undefined;
     const data = {
       id: invite.id,
       teacher: teacher,

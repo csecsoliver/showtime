@@ -7,7 +7,7 @@ import type {
   Teacher,
   Workshop,
 } from "~/server/types/types";
-
+const toast = useToast();
 const route = useRoute();
 if (route.params.id.length < 1) {
   navigateTo("/");
@@ -31,35 +31,44 @@ const teacher: Ref<Teacher> = ref({
 const user = ref((useUserSession().user.value as SessionData)?.name);
 const authState = ref(false);
 const name = ref("");
+const exists = ref(true);
 async function init() {
-  const response: InviteBasic | InviteDetails = await $fetch(
-    `/api/invites/${route.params.id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  if ("invitor" in response) {
-    invitor.value = response.invitor;
-    console.log(invitor);
-    date.value = new Date(response.date);
-    authState.value = false;
-    console.log("unathenticated");
-  } else if (
-    "teacher" in response &&
-    "workshop" in response &&
-    "email" in response
-  ) {
-    invitor.value = response.teacher.name ?? response.teacher.email;
-    date.value = new Date(response.workshop.time);
-    authState.value = true;
-    workshop.value = response.workshop;
-    teacher.value = response.teacher;
-    user.value = (useUserSession().user.value as SessionData).name;
+  try {
+    const response: InviteBasic | InviteDetails = await $fetch(
+      `/api/invites/${route.params.id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if ("invitor" in response) {
+      invitor.value = response.invitor;
+      console.log(invitor);
+      date.value = new Date(response.date);
+      authState.value = false;
+      console.log("unathenticated");
+    } else if (
+      "teacher" in response &&
+      "workshop" in response &&
+      "email" in response
+    ) {
+      invitor.value = response.teacher.name ?? response.teacher.email;
+      date.value = new Date(response.workshop.time);
+      authState.value = true;
+      workshop.value = response.workshop;
+      teacher.value = response.teacher;
+      user.value = (useUserSession().user.value as SessionData).name;
 
-    console.log("athenticated");
+      console.log("athenticated");
+    }
+  } catch (error) {
+    exists.value = false;
+    toast.add({
+      title: `Hiba történt a meghívó betöltése során: ${error}`,
+      color: "error",
+    });
   }
 }
 async function confirmParticipation() {
@@ -79,11 +88,11 @@ async function confirmParticipation() {
   workshop.value.participants.push(response);
   console.log("confirmed participation", response);
 }
+
 init();
 </script>
 <template>
-  <div>
-    
+  <div v-if="exists">
     <div v-if="!authState.valueOf()">
       <h2>
         {{ invitor }} meghívta a
@@ -108,7 +117,7 @@ init();
             month: "long",
             day: "numeric",
             hour: "numeric",
-            minute: "numeric", 
+            minute: "numeric",
           })
         }}
         időpontban tartandó Ciklus-show foglalkozásra.
@@ -135,21 +144,19 @@ init();
             )"
             :key="part.name"
           >
-            {{ part.name }}, 
+            {{ part.name }},
           </span>
         </li>
       </ul>
-      
+
       <UFormField class="my-3" label="Részvétel megerősítése" name="code">
         <UInput v-model="name" placeholder="Részvevő neve" />
 
-        <UButton
-          class="button"
-          @click="confirmParticipation"
-        >
+        <UButton class="button" @click="confirmParticipation">
           Megerősítés
         </UButton>
       </UFormField>
     </div>
+    <div></div>
   </div>
 </template>

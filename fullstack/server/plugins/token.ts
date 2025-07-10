@@ -27,8 +27,14 @@ export default function token(option: string, param: string) {
       }
       return null;
     }
+    case "remove":
+      Object.keys(tokens).forEach((key) => {
+        if (tokens[key].user === param) {
+          tokens[key].user = "";
+        }
+      });
+      return true;
+    
 
-    default:
-      break;
   }
 }
