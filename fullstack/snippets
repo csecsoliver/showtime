@@ -28,8 +28,9 @@ toast.add({
 });
 
 
-import transporter from "~/server/plugins/email";
-await transporter().sendMail({
+
+import provideEmailTransporter from "~/server/plugins/email";
+await provideEmailTransporter().sendMail({
   from: "showtime.coe@gmail.com",
   to: teacher.email,
   subject: `Új résztvevő - ${body.name}`,

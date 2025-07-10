@@ -1,8 +1,8 @@
 <template>
   <div>
-    <UButton class="button" @click="deleteWorkshop">
+    <button class="button" @click="deleteWorkshop">
       Lemondás
-    </UButton>
+    </button>
   </div>
 </template>
 

@@ -144,7 +144,10 @@ init();
             )"
             :key="part.name"
           >
-            {{ part.name }},
+            {{ part.name }}: <CancelPrticipation
+            :id="workshop.id"
+            :name="part.name"
+            />,
           </span>
         </li>
       </ul>
