@@ -1,0 +1,1 @@
+{"email":"c.oliver.elemer@gmail.com","workshops":["16"]}

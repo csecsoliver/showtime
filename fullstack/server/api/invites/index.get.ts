@@ -23,6 +23,11 @@ export default defineEventHandler(async (event) => {
     const openInvitesList: Array<InviteBasic> = [];
     const partInvitesList: Array<InviteDetails> = [];
     for (const id of invitesIds) {
+      if (!(await workshops.hasItem((await invites.getItem(id) as InviteStored).workshopId))) {
+        await invites.removeItem(id);
+        console.warn(`Removed invite ${id} with non-existing workshop`);
+        continue;
+      }
       const invite = (await invites.getItem(id)) as InviteStored;
       if (invite.id) {
         const workshop: Workshop = (await workshops.getItem(

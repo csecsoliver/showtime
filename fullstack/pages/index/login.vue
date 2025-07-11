@@ -30,6 +30,11 @@ async function handleLogin(): Promise<void> {
   loading.value = true;
   try {
     await response;
+    loading.value = false;
+    console.log("Login response:", response);
+
+    // navigateTo('/dashboard');
+    location.href = "/dashboard";
   } catch (error) {
     switch ((error as NuxtError).statusMessage) {
       case "userExistsError":
@@ -46,7 +51,8 @@ async function handleLogin(): Promise<void> {
         break;
       case "passwordError":
         toast.add({
-          title: "A jelszó nem felel meg a követelményeknek: min 8, max 72 karakter",
+          title:
+            "A jelszó nem felel meg a követelményeknek: min 8, max 72 karakter",
           color: "error",
         });
         break;
@@ -56,13 +62,9 @@ async function handleLogin(): Promise<void> {
           color: "error",
         });
     }
+    loading.value = false;
+    console.log("Login response:", response);
   }
-  loading.value = false;
-  console.log("Login response:", response);
-
-  // navigateTo('/dashboard');
-  location.href = "/dashboard";
-
 }
 
 async function signup() {
@@ -86,7 +88,7 @@ async function resetMatch() {
         class="bg-white"
         type="text"
         required
-      >
+      />
       <label for="password">Jelszó:</label>
       <input
         id="password"
@@ -95,7 +97,7 @@ async function resetMatch() {
         type="password"
         required
         @change="resetMatch()"
-      >
+      />
       <label
         id="password2l"
         for="password2"
@@ -110,7 +112,7 @@ async function resetMatch() {
         :required="register"
         :style="{ display: register ? 'block' : 'none' }"
         @change="resetMatch()"
-      >
+      />
       <p style="color: red">{{ match }}</p>
       <button id="submit" class="button" type="submit" :disabled="loading">
         {{ register ? "Regisztrálás" : "Bejelentkezés" }}

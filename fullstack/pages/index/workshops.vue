@@ -13,17 +13,24 @@ const invites = ref({
   detailedInvites: [] as Array<InviteDetails>,
 });
 async function init() {
-  try {invites.value = (await $fetch("/api/invites")) as {
-    basicInvites: Array<InviteBasic>;
-    detailedInvites: Array<InviteDetails>;
-  };
-  console.log(
-    `Found ${invites.value.basicInvites.length} open invites and ${Object.keys(invites.value.detailedInvites[0])} detailed invites for user ${authState.value.email}`
-  );} catch (error) {
+  try {
+    invites.value = (await $fetch("/api/invites")) as {
+      basicInvites: Array<InviteBasic>;
+      detailedInvites: Array<InviteDetails>;
+    };
+    console.log(
+      `Found ${
+        invites.value.basicInvites.length
+      } open invites and ${Object.keys(
+        invites.value.detailedInvites[0]
+      )} detailed invites for user ${authState.value.email}`
+    );
+  } catch (error) {
     switch ((error as NuxtError).statusMessage) {
       case "unimplemented":
         toast.add({
-          title: "Tanárként van bejelentkezve, megtekintéshez jelentkezzen be külsősként",
+          title:
+            "Tanárként van bejelentkezve, megtekintéshez jelentkezzen be külsősként",
           color: "error",
         });
         break;

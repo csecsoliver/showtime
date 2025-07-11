@@ -1,0 +1,1 @@
+{"email":"0oliogamer0@gmail.com","workshops":["16","17"],"password":"$2b$12$UMEHsF4T4LYgK/nqXRmJtO0zI9RHyhDz7GzmE.I1aPv4SMwQu.QQu"}
