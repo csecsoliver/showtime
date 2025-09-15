@@ -43,12 +43,14 @@ export interface InviteDetails {
   teacher: Teacher;
   workshop: Workshop;
   email: string;
+  custom_text?: string;
 }
 export interface InviteStored{
   // This is the type stored in the database
   id: string;
   invitor: string;
   workshopId: string;
+  custom_text?: string;
 }
 export interface User {
   // user type for participants

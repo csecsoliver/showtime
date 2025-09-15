@@ -8,4 +8,4 @@ kék színezés fius foglalkozáshoz
 ÷értesítési email  
 ÷létszám értesítő  
 ÷fájlfeltöltés: nyilatkozat  
-÷étekallergia; done  
+étekallergia; done
