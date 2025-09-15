@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
     );
     return;
   }
-  const body = (await readBody(event)) as { name: string; email: string };
+  const body = (await readBody(event)) as { name: string; email: string; special?: string };
   if (typeof body !== "object" || !body || !body.email || !body.name) {
     sendError(
       event,
@@ -78,12 +78,13 @@ export default defineEventHandler(async (event) => {
       if (!participant.name) {
         workshop.participants[index].name = body.name;
         workshop.participants[index].confirmed = true;
+        workshop.participants[index].special = body.special;
         await workshops.setItem(invite.workshopId, workshop);
         await transporter().sendMail({
           from: "showtime.coe@gmail.com",
           to: teacher.email,
           subject: `Új résztvevő - ${body.name}`,
-          text: `${body.email} megerősítette ${body.name} részvételét.`,
+          text: `${body.email} megerősítette ${body.name} részvételét. ${body.special?`Megadott speciális igényeket: ${body.special}`:"Nem adott meg speciális igényeket"}`,
         });
 
         return workshop.participants[index];
@@ -92,13 +93,14 @@ export default defineEventHandler(async (event) => {
           email: body.email,
           name: body.name,
           confirmed: true,
+          special: body.special
         });
         await workshops.setItem(invite.workshopId, workshop);
         await transporter().sendMail({
           from: "showtime.coe@gmail.com",
           to: teacher.email,
           subject: `Új résztvevő - ${body.name}`,
-          text: `${body.email} megerősítette ${body.name} részvételét.`,
+          text: `${body.email} megerősítette ${body.name} részvételét. ${body.special?`Megadott speciális igényeket: ${body.special}`:"Nem adott meg speciális igényeket"}`,
         });
         return workshop.participants[workshop.participants.length - 1];
       } else {

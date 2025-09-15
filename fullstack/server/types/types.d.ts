@@ -13,6 +13,7 @@ export interface Participant {
   name: string; // name of the participant (not the parent/user)
   email: string; // connecting to the stored User
   confirmed: boolean; // whether the participant has confirmed their participation
+  special?: string; // special request, for example allergies, sens-itivities, conditions
 }
 export interface SecureSessionData {
   // Used for handling session data conveniently

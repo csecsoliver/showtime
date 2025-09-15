@@ -32,6 +32,7 @@ const teacher: Ref<Teacher> = ref({
 const user = ref((useUserSession().user.value as SessionData)?.name);
 const authState = ref(false);
 const name = ref("");
+const special = ref("");
 const exists = ref(true);
 async function init() {
   try {
@@ -80,6 +81,7 @@ async function confirmParticipation() {
       body: {
         email: user.value,
         name: name.value,
+        special: special.value!=""?special.value:undefined
       },
       headers: {
         "Content-Type": "application/json",
@@ -103,7 +105,7 @@ async function confirmParticipation() {
         break;
       case "workshopClosedError":
         toast.add({
-          title: "A workshophoz már nem lehet csatlakozni",
+          title: "A foglalkozáshoz már nem lehet csatlakozni",
           color: "error",
         });
         break;
@@ -187,7 +189,7 @@ init();
 
       <UFormField class="my-3" label="Részvétel megerősítése" name="code">
         <UInput v-model="name" placeholder="Részvevő neve" />
-
+        <UInput v-model="special" placeholder="Speciális igényei" />
         <UButton class="button" @click="confirmParticipation">
           Megerősítés
         </UButton>
