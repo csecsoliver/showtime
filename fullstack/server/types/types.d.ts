@@ -36,6 +36,7 @@ export interface InviteBasic {
   id: string;
   invitor: string;
   date: string | Date; // ISO 8601 format not including time within day
+  custom_text?: string;
 }
 export interface InviteDetails {
   // This is the type sent back to the client who verified their email
@@ -50,7 +51,7 @@ export interface InviteStored{
   id: string;
   invitor: string;
   workshopId: string;
-  custom_text?: string;
+  custom?: {public:boolean, text:string}; // possibly public, custom invite text
 }
 export interface User {
   // user type for participants

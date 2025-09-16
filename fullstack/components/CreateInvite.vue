@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UFormField } from "#components";
 import { ref } from "vue";
 import * as z from "zod";
 import type { InviteStored, Workshop } from "~/server/types/types";
@@ -7,6 +8,7 @@ const state = ref({
   workshopText: "",
   sendEmails: false,
   emails: "",
+  custom: {text: "", public: false}
 });
 let inviteId: string | null = null; // This will hold the invite ID after creation
 let response: Workshop[] = [];
@@ -14,6 +16,8 @@ const schema = z.object({
   workshopText: z.string(),
   sendEmails: z.boolean().optional(),
   emails: z.string().optional(),
+  customtext: z.string().optional(),
+  custompub: z.boolean().optional(),
 });
 const items: Ref<string[]> = ref([]);
 async function submitInvite() {
@@ -97,6 +101,16 @@ fetchWorkshops();
             type="text"
             placeholder= "Példa: email@example.com, email2@example.com"
           />
+        </UFormField>
+        <UFormField label="Egyedi meghívószöveg" name="customtext">
+          <UInput
+            v-model="state.custom.text"
+            type="text"
+            placeholder="Ez fog megjelenni a megívottak számára"
+          />
+        </UFormField>
+        <UFormField label="Egyedi meghívószöveg publikus?" name="custompub">
+          <UCheckbox v-model="state.custom.public"/>
         </UFormField>
         <UButton type="submit"  class="button"> Submit </UButton>
       </UForm>
