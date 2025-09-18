@@ -13,7 +13,8 @@ const state = ref({
   time: Date.now().toString(),
   open: false,
   location: "",
-  participants: [] as Participant[]
+  participants: [] as Participant[],
+  sponsor: "Önerő",
 });
 const schema = z.object({
   town: z.string().min(2).max(100),
@@ -25,6 +26,10 @@ const schema = z.object({
     email: z.string().email(),
   })),
 });
+const sponsoroptions = ref([
+  "Önerő",
+  "Állami",
+])
 const workshopid = ref('');
 async function refresh() {
   const response = await $fetch("/api/workshops", {
@@ -117,6 +122,9 @@ refresh();
             name="open"
             
           />
+        </UFormField>
+        <UFormField label="Támogatottsági státusz">
+          <USelect v-model="state.sponsor" :items="sponsoroptions"/>
         </UFormField>
         <ul>
           <li

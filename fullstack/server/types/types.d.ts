@@ -8,6 +8,7 @@ export interface Workshop {
   open: boolean;
   teachers: Array<string>;
   invites?: Array<string>;
+  sponsor: "gov" | "none";
 }
 export interface Participant {
   name: string; // name of the participant (not the parent/user)
@@ -51,7 +52,7 @@ export interface InviteStored{
   id: string;
   invitor: string;
   workshopId: string;
-  custom?: {public:boolean, text:string}; // possibly public, custom invite text
+  custom?: {public:boolean, text:string}; // possibly public, optional custom invite text
 }
 export interface User {
   // user type for participants

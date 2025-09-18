@@ -4,7 +4,7 @@ kedd szombat kérvényezése
 ÷egyedi meghívószöveg  
 ??eseti résztvevők  
 kék színezés fius foglalkozáshoz  
-÷támogatási státusz  
+÷támogatottsági státusz  
 ÷értesítési email  
 ÷létszám értesítő  
 ÷fájlfeltöltés: nyilatkozat  
