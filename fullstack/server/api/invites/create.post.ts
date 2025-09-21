@@ -1,7 +1,7 @@
 import fsDriver from "unstorage/drivers/fs";
 import { createStorage } from "unstorage";
-import type { InviteStored, SecureSessionData, SessionData } from "~/server/types/types";
-import token from "~/server/plugins/token";
+import type { InviteStored, SecureSessionData, SessionData } from "~~/server/types/types";
+import token from "~~/server/plugins/token";
 import { randomInt } from "crypto";
 const invites = createStorage({
   driver: fsDriver({ base: "./invites/" }),

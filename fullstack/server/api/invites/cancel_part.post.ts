@@ -1,7 +1,7 @@
 import { createStorage } from "unstorage";
 import fsDriver from "unstorage/drivers/fs";
-import provideEmailTransporter from "~/server/plugins/email";
-import { Workshop } from "~/server/types/types";
+import provideEmailTransporter from "~~/server/plugins/email";
+import { Workshop } from "~~/server/types/types";
 const workshops = createStorage({
   driver: fsDriver({ base: "./workshops" }),
 });

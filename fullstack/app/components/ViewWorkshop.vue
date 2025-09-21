@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import z from "zod";
-import type { Participant, Workshop } from "~/server/types/types";
+import type { Participant, Workshop } from "~~/server/types/types";
 const toast = useToast();
 
 const props = defineProps<{

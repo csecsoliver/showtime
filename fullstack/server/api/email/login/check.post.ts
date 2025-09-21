@@ -1,6 +1,6 @@
-import codes from "~/server/plugins/codes";
-import verification from "~/server/plugins/verification";
-import type { SecureSessionData, SessionData } from "~/server/types/types";
+import codes from "~~/server/plugins/codes";
+import verification from "~~/server/plugins/verification";
+import type { SecureSessionData, SessionData } from "~~/server/types/types";
 export default defineEventHandler(async (event) => {
   const body = (await readBody(event)) as {token: string, email: string};
   if (typeof body !== "object" || !body || !body.email || !body.token) {

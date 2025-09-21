@@ -6,7 +6,7 @@ import type {
   InviteStored,
   Teacher,
   Workshop,
-} from "~/server/types/types";
+} from "~~/server/types/types";
 
 const workshops = createStorage({
   driver: fsDriver({ base: "./workshops/" }),

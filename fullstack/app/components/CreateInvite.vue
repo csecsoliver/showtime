@@ -2,7 +2,7 @@
 import { UFormField } from "#components";
 import { ref } from "vue";
 import * as z from "zod";
-import type { InviteStored, Workshop } from "~/server/types/types";
+import type { InviteStored, Workshop } from "~~/server/types/types";
 
 const state = ref({
   workshopText: "",

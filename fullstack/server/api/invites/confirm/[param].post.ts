@@ -1,7 +1,7 @@
 import fsDriver from "unstorage/drivers/fs";
 import { createStorage } from "unstorage";
-import transporter from "~/server/plugins/email";
-import type { InviteStored, Teacher, Workshop } from "~/server/types/types";
+import transporter from "~~/server/plugins/email";
+import type { InviteStored, Teacher, Workshop } from "~~/server/types/types";
 const invites = createStorage({
   driver: fsDriver({ base: "./invites/" }),
 });

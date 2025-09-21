@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Workshop } from "~/server/types/types";
+import type { Workshop } from "~~/server/types/types";
 import ViewWorkshop from "~/components/ViewWorkshop.vue";
 const toast = useToast();
 const workshops: Ref<Workshop[]> = ref([]);

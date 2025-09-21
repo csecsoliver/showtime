@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Workshop } from "~/server/types/types";
+import type { Workshop } from "~~/server/types/types";
 const toast = useToast();
 const workshops: globalThis.Ref<Workshop[]> = ref([]);
 async function refresh() {

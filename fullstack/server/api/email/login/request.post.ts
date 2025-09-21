@@ -1,7 +1,7 @@
 import { createStorage } from "unstorage";
 import fsDriver from "unstorage/drivers/fs";
-import codes from "~/server/plugins/codes";
-import transporter from "~/server/plugins/email";
+import codes from "~~/server/plugins/codes";
+import transporter from "~~/server/plugins/email";
 const users = createStorage({
   driver: fsDriver({ base: "./users" }),
 });

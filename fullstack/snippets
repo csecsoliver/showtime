@@ -32,7 +32,7 @@ toast.add({
   color: "error",
 });
 
-import provideEmailTransporter from "~/server/plugins/email";
+import provideEmailTransporter from "~~/server/plugins/email";
 await provideEmailTransporter().sendMail({
   from: "showtime.coe@gmail.com",
   to: teacher.email,

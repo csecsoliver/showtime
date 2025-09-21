@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { NuxtError } from "#app";
-import type { InviteBasic, InviteDetails } from "~/server/types/types";
+import type { InviteBasic, InviteDetails } from "~~/server/types/types";
 const authState = ref(
   (await $fetch("/api/auth")) as {
     auth: boolean;

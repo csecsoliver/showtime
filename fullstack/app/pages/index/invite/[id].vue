@@ -7,7 +7,7 @@ import type {
   SessionData,
   Teacher,
   Workshop,
-} from "~/server/types/types";
+} from "~~/server/types/types";
 const toast = useToast();
 const route = useRoute();
 if (route.params.id.length < 1) {
