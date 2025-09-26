@@ -5,6 +5,13 @@ const docup = createStorage({
 });
 
 export default defineEventHandler(async (event) => {
+  if (event.context.userType !== "teacher") {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "Forbidden: You don't have permission to upload files",
+    });
+    return;
+  }
   const body = await readBody(event);
   if (!body || !body.file || !body.name) {
     throw createError({
