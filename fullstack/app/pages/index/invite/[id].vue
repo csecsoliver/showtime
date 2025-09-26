@@ -10,7 +10,7 @@ import type {
 } from "~~/server/types/types";
 const toast = useToast();
 const route = useRoute();
-if (route.params.id.length < 1) {
+if (!route.params.id || (typeof route.params.id === 'string' && route.params.id.length < 1)) {
   navigateTo("/");
 }
 const date: Ref = ref(new Date());
@@ -23,6 +23,8 @@ const workshop: Ref<Workshop> = ref({
   open: false,
   participants: [],
   teachers: [],
+  sponsor: "none",
+  maxParticipants: null,
 });
 const teacher: Ref<Teacher> = ref({
   // user type for teachers
@@ -33,6 +35,8 @@ const user = ref((useUserSession().user.value as SessionData)?.name);
 const authState = ref(false);
 const name = ref("");
 const special = ref("");
+const files: Ref<Array<{name:string, mimeType:string}>> = ref([]);
+const custom_text: Ref<string | undefined > = ref("");
 const exists = ref(true);
 async function init() {
   try {
@@ -62,7 +66,8 @@ async function init() {
       workshop.value = response.workshop;
       teacher.value = response.teacher;
       user.value = (useUserSession().user.value as SessionData).name;
-
+      files.value = response.files || [];
+      custom_text.value =response.custom_text;
       console.log("athenticated");
     }
   } catch {
@@ -73,6 +78,10 @@ async function init() {
     });
   }
 }
+function downloadFile(fileName: string) {
+  window.open(`/api/files/${fileName}`, '_blank');
+}
+
 async function confirmParticipation() {
   try {const response: Participant = await $fetch(
     `/api/invites/confirm/${route.params.id}`,
@@ -159,6 +168,7 @@ init();
       </h2>
       <ul>
         <li>Foglalkozásvezető elérhetősége: {{ teacher.email }}</li>
+        <li v-if="custom_text">Foglalkozásvezető üzenete: {{ custom_text }}</li>
         <li>
           Foglalkozás helyszíne: {{ workshop.location ?? "Határozatlan" }}
           {{ workshop.town }}
@@ -186,6 +196,20 @@ init();
           </span>
         </li>
       </ul>
+
+      <div v-if="files.length > 0" class="my-4">
+        <h3 class="font-semibold mb-2">Egyéb dokumentumok</h3>
+        <ul class="list-disc list-inside">
+          <li v-for="file in files" :key="file.name" class="mb-1">
+            <button 
+              @click="downloadFile(file.name)"
+              class="text-blue-600 hover:text-blue-800 underline"
+            >
+              {{ file.name }}
+            </button>
+          </li>
+        </ul>
+      </div>
 
       <UFormField class="my-3" label="Részvétel megerősítése" name="code">
         <UInput v-model="name" placeholder="Részvevő neve" />

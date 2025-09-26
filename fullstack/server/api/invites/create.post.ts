@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
     invitor: sessionData.name,
     workshopId: body.workshopId,
     custom: body.custom,
+    files: body.files || [], // Include files if provided
   };
   invites.setItem(invite.id, invite);
   return invite;

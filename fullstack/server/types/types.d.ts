@@ -10,7 +10,7 @@ export interface Workshop {
   invites?: Array<string>;
   sponsor: "gov" | "none";
   maxParticipants: number | null;
-  
+
 }
 export interface Participant {
   name: string; // name of the participant (not the parent/user)
@@ -56,6 +56,7 @@ export interface InviteStored{
   invitor: string;
   workshopId: string;
   custom?: {public:boolean, text:string}; // possibly public, optional custom invite text
+  files?: Array<{name:string, mimeType:string}>; // attached files for the invite
 }
 export interface User {
   // user type for participants

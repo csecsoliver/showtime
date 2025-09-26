@@ -63,6 +63,8 @@ export default defineEventHandler(async (event) => {
       teacher: teacher,
       workshop: workshop,
       email: teacher.email,
+      files: invite.files || [], // Include files from the invite
+      custom_text: invite.custom?.text, // Include custom text if available
     } as InviteDetails;
     console.log(data);
     return data;
