@@ -9,6 +9,8 @@ export interface Workshop {
   teachers: Array<string>;
   invites?: Array<string>;
   sponsor: "gov" | "none";
+  maxParticipants: number | null;
+  
 }
 export interface Participant {
   name: string; // name of the participant (not the parent/user)
@@ -46,6 +48,7 @@ export interface InviteDetails {
   workshop: Workshop;
   email: string;
   custom_text?: string;
+  files: Array<{name:string, mimeType:string}>;
 }
 export interface InviteStored{
   // This is the type stored in the database
