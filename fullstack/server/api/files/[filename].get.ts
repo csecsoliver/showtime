@@ -56,6 +56,8 @@ export default defineEventHandler(async (event) => {
     // Set appropriate headers for file download
     setHeader(event, "Content-Type", (fileMeta?.mimeType as string) || "application/octet-stream");
     setHeader(event, "Content-Disposition", `attachment; filename="${filename}"`);
+    setHeader(event, "Content-Length", fileBuffer.length);
+    setHeader(event, "Cache-Control", "no-cache");
     
     // Return the proper buffer
     return fileBuffer;

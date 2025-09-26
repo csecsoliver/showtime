@@ -7,6 +7,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { NuxtError } from "#app";
 const toast = useToast();
 const props = defineProps<{
   id: string;
@@ -31,10 +32,31 @@ async function deleteWorkshop() {
     });
     navigateTo("/dashboard/sessions");
   } catch (error) {
-    toast.add({
-      title: "Hiba történt a foglalkozás lemondása során: " + error,
-      color: "error",
-    });
+    switch ((error as NuxtError).statusMessage) {
+      case "Unauthorized":
+        toast.add({
+          title: "Nincs jogosultsága, töltse be újra az oldalt",
+          color: "error",
+        });
+        break;
+      case "Not Found":
+        toast.add({
+          title: "A foglalkozás nem található",
+          color: "error",
+        });
+        break;
+      case "forbidden":
+        toast.add({
+          title: "Nincs jogosultsága ehhez a művelethez",
+          color: "error",
+        });
+        break;
+      default:
+        toast.add({
+          title: "Hiba történt a foglalkozás lemondása során",
+          color: "error",
+        });
+    }
   }
 }
 </script>

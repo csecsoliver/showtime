@@ -46,6 +46,12 @@ async function update(field: keyof typeof state) {
           color: "error",
         });
         break;
+      case "badRequest":
+        toast.add({
+          title: "Érvénytelen kérés, ellenőrizze az adatokat",
+          color: "error",
+        });
+        break;
       default:
         toast.add({
           title: "Hiba történt a mentés során, kérjük, jelentse a fejlesztőknek",

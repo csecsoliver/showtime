@@ -19,7 +19,17 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Invalid request body",
     });
   }
+
   const buffer = Buffer.from(body.file, "base64");
+  
+  // Security: File size limit (10MB)
+  const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+  if (buffer.length > maxSize) {
+    throw createError({
+      statusCode: 413,
+      statusMessage: "File too large. Maximum size is 10MB",
+    });
+  }
   await docup.setItem(body.name, buffer);
   await docup.setMeta(body.name, { mimeType: body.type || "application/octet-stream" });
   return { message: "File uploaded successfully", fileName: body.name };

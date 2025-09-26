@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import z from "zod";
+import type { NuxtError } from "#app";
 import type { Participant, Workshop } from "~~/server/types/types";
 const toast = useToast();
 
@@ -42,7 +43,7 @@ async function refresh() {
   const workshop = data.find((w: Workshop) => w.id == props.id);
   if (!workshop) {
     toast.add({
-      title: "Workshop not found",
+      title: "Foglalkozás nem található",
       color: "error",
     });
     return;
@@ -76,12 +77,37 @@ async function submitWorkshop() {
         "Content-Type": "application/json",
       },
     });
+    toast.add({
+      title: "Foglalkozás sikeresen módosítva",
+      color: "success",
+    });
     // location.reload();
   } catch (error) {
-    toast.add({
-      title: (error as Error).message,
-      color: "error",
-    });
+    switch ((error as NuxtError).statusMessage) {
+      case "Unauthorized":
+        toast.add({
+          title: "Nincs jogosultsága, töltse be újra az oldalt",
+          color: "error",
+        });
+        break;
+      case "Not Found":
+        toast.add({
+          title: "A foglalkozás nem található",
+          color: "error",
+        });
+        break;
+      case "forbidden":
+        toast.add({
+          title: "Nincs jogosultsága ehhez a művelethez",
+          color: "error",
+        });
+        break;
+      default:
+        toast.add({
+          title: "Hiba történt a foglalkozás módosítása során",
+          color: "error",
+        });
+    }
   }
 }
 async function removeParticipant(email: string) {

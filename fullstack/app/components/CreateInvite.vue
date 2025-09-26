@@ -2,6 +2,7 @@
 import { UFormField } from "#components";
 import { ref } from "vue";
 import * as z from "zod";
+import type { NuxtError } from "#app";
 import type { InviteStored, Workshop } from "~~/server/types/types";
 
 const state = ref({
@@ -28,6 +29,45 @@ async function handleFileUpload(event: Event) {
 
   for (const file of target.files) {
     try {
+      // Validate file size (10MB limit)
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (file.size > maxSize) {
+        const toast = useToast();
+        toast.add({
+          title: "Fájl túl nagy",
+          description: `${file.name} túl nagy. Maximum méret: 10MB`,
+          color: "error",
+        });
+        continue;
+      }
+
+      // Basic file type validation (allow common document types)
+      const allowedTypes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'text/plain',
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'text/csv',
+        'application/zip',
+        'application/x-yaml',
+        'text/yaml'
+      ];
+      
+      if (file.type && !allowedTypes.includes(file.type)) {
+        const toast = useToast();
+        toast.add({
+          title: "Nem támogatott fájltípus",
+          description: `${file.name} fájltípusa nem támogatott`,
+          color: "error",
+        });
+        continue;
+      }
+
       const uniqueFileName = generateUniqueFileName(file.name);
       
       const reader = new FileReader();
@@ -35,24 +75,56 @@ async function handleFileUpload(event: Event) {
         const result = e.target?.result as string;
         const base64Data = result.split(',')[1]; // Remove data:type;base64, prefix
         
-        const uploadResponse = await $fetch("/api/files/upload", {
-          method: "POST",
-          body: {
-            file: base64Data,
+        try {
+          const uploadResponse = await $fetch("/api/files/upload", {
+            method: "POST",
+            body: {
+              file: base64Data,
+              name: uniqueFileName,
+              type: file.type
+            },
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          
+          uploadedFiles.value.push({
             name: uniqueFileName,
-            type: file.type
-          },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        
-        uploadedFiles.value.push({
-          name: uniqueFileName,
-          mimeType: file.type
-        });
-        
-        console.log("File uploaded:", uploadResponse);
+            mimeType: file.type
+          });
+          
+          console.log("File uploaded:", uploadResponse);
+        } catch (error: any) {
+          console.error("File upload failed:", error);
+          const toast = useToast();
+          
+          switch ((error as NuxtError).statusMessage) {
+            case "Forbidden: You don't have permission to upload files":
+              toast.add({
+                title: "Nincs jogosultsága fájl feltöltéshez",
+                color: "error",
+              });
+              break;
+            case "Invalid request body":
+              toast.add({
+                title: "Érvénytelen kérés",
+                color: "error",
+              });
+              break;
+            case "File too large. Maximum size is 10MB":
+              toast.add({
+                title: "A fájl túl nagy. Maximum méret: 10MB",
+                color: "error",
+              });
+              break;
+            default:
+              toast.add({
+                title: "Fájl feltöltése sikertelen",
+                description: "Kérjük, próbálja újra később",
+                color: "error",
+              });
+          }
+        }
       };
       reader.readAsDataURL(file);
     } catch (error) {
@@ -80,8 +152,18 @@ function generateUniqueFileName(originalName: string): string {
   return uniqueName;
 }
 
-function removeFile(fileName: string) {
-  uploadedFiles.value = uploadedFiles.value.filter(file => file.name !== fileName);
+async function removeFile(fileName: string) {
+  try {
+    // Remove from server (optional - could implement a delete endpoint)
+    // await $fetch(`/api/files/${encodeURIComponent(fileName)}`, { method: 'DELETE' });
+    
+    // Remove from local list
+    uploadedFiles.value = uploadedFiles.value.filter(file => file.name !== fileName);
+  } catch (error) {
+    console.error("Error removing file:", error);
+    // File removal from UI still happens even if server cleanup fails
+    uploadedFiles.value = uploadedFiles.value.filter(file => file.name !== fileName);
+  }
 }
 
 async function submitInvite() {
@@ -90,6 +172,12 @@ async function submitInvite() {
   
   if (!workshopId) {
     console.error("Invalid workshop selection");
+    const toast = useToast();
+    toast.add({
+      title: "Érvénytelen foglalkozás kiválasztás",
+      description: "Kérjük, válasszon ki egy érvényes foglalkozást",
+      color: "error",
+    });
     return;
   }
   
@@ -108,12 +196,45 @@ async function submitInvite() {
     }) as InviteStored;
     console.log("Invite created:", response);
     inviteId = response.id
+    const toast = useToast();
+    toast.add({
+      title: "Meghívó sikeresen létrehozva",
+      color: "success",
+    });
     if (state.value.sendEmails) {
       await sendInvites()
     }
     location.reload();
   } catch (error) {
     console.error("Error creating invite:", error);
+    const toast = useToast();
+    
+    switch ((error as NuxtError).statusMessage) {
+      case "unauthorized":
+        toast.add({
+          title: "Nincs jogosultsága, töltse be újra az oldalt",
+          color: "error",
+        });
+        break;
+      case "Missing workshopId":
+        toast.add({
+          title: "Hiányzó foglalkozás azonosító",
+          color: "error",
+        });
+        break;
+      case "Workshop not found":
+        toast.add({
+          title: "A foglalkozás nem található",
+          color: "error",
+        });
+        break;
+      default:
+        toast.add({
+          title: "Hiba történt a meghívó létrehozása során",
+          description: "Kérjük, próbálja újra később",
+          color: "error",
+        });
+    }
   }
 }
 async function sendInvites() {
@@ -133,6 +254,12 @@ async function sendInvites() {
     console.log("Invites sent:", response);
   } catch (error) {
     console.error("Error sending invites:", error);
+    const toast = useToast();
+    toast.add({
+      title: "Hiba történt az emailek küldése során",
+      description: "A meghívó létrejött, de az emailek küldése sikertelen",
+      color: "error",
+    });
   }
 }
 async function fetchWorkshops() {
@@ -146,6 +273,12 @@ async function fetchWorkshops() {
     items.value = response.map((workshop: Workshop) => workshop.town + " - " + workshop.time + " (" + workshop.id + ")");
   } catch (error) {
     console.error("Error fetching workshops:", error);
+    const toast = useToast();
+    toast.add({
+      title: "Hiba történt a foglalkozások betöltése során",
+      description: "Kérjük, töltse be újra az oldalt",
+      color: "error",
+    });
   }
 }
 fetchWorkshops();

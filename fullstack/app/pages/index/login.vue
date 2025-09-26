@@ -56,6 +56,12 @@ async function handleLogin(): Promise<void> {
           color: "error",
         });
         break;
+      case "wrongOption":
+        toast.add({
+          title: "Érvénytelen beállítás",
+          color: "error",
+        });
+        break;
       default:
         toast.add({
           title: "Hiba történt, kérjük, jelentse a fejlesztőknek",

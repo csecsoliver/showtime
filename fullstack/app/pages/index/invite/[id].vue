@@ -79,7 +79,9 @@ async function init() {
   }
 }
 function downloadFile(fileName: string) {
-  window.open(`/api/files/${fileName}`, '_blank');
+  // Properly encode filename for URL
+  const encodedFileName = encodeURIComponent(fileName);
+  window.open(`/api/files/${encodedFileName}`, '_blank');
 }
 
 async function confirmParticipation() {
@@ -98,7 +100,11 @@ async function confirmParticipation() {
     }
   );
   workshop.value.participants.push(response);
-  console.log("confirmed participation", response);} catch (error) {
+  console.log("confirmed participation", response);
+  toast.add({
+    title: "Részvétel sikeresen megerősítve",
+    color: "success",
+  });} catch (error) {
     switch ((error as NuxtError).statusMessage) {
       case "inviteNotFound":
         toast.add({

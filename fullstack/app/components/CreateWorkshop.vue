@@ -21,9 +21,20 @@ async function submitWorkshop() {
       },
     });
     console.log('Workshop created:', response);
+    const toast = useToast();
+    toast.add({
+      title: "Foglalkozás sikeresen létrehozva",
+      color: "success",
+    });
     location.reload();
   } catch (error) {
     console.error('Error creating workshop:', error);
+    const toast = useToast();
+    toast.add({
+      title: "Hiba történt a foglalkozás létrehozása során",
+      description: "Kérjük, próbálja újra később",
+      color: "error",
+    });
   }
 }
 
