@@ -22,5 +22,15 @@ export default defineNuxtConfig({
       password: "asswordDDDDDDDDDDDDDDDDDDDDDDDDD",
     },
   },
-
+  app: {
+    head: {
+      title: 'ShowTime', // default fallback title
+      htmlAttrs: {
+        lang: 'hu',
+      },
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
+    },
+  },
 });
