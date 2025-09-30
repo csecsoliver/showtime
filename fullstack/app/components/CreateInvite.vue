@@ -197,8 +197,14 @@ async function submitInvite() {
     console.log("Invite created:", response);
     inviteId = response.id
     const toast = useToast();
+    
+    // Copy invite URL to clipboard
+    const inviteUrl = `${window.location.origin}/invite/${response.id}`;
+    await navigator.clipboard.writeText(inviteUrl);
+    
     toast.add({
       title: "Meghívó sikeresen létrehozva",
+      description: "URL vágólapra másolva",
       color: "success",
     });
     if (state.value.sendEmails) {
