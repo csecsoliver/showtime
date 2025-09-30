@@ -35,10 +35,7 @@ async function init() {
         });
         break;
       default:
-        toast.add({
-          title: "Hiba történt, kérjük, jelentse a fejlesztőknek",
-          color: "error",
-        });
+        console.log("something undefined happened, this may not have affected anything")
     }
   }
 }
@@ -46,7 +43,7 @@ init();
 </script>
 <template>
   <div>
-    Not yet working, please set up a teacher account and send out invites. This is supposed to be a discovery feature.
+    
     <div v-if="authState?.auth">
       <AuthState />
       <div>
