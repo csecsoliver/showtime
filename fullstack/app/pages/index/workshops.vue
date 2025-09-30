@@ -18,13 +18,7 @@ async function init() {
       basicInvites: Array<InviteBasic>;
       detailedInvites: Array<InviteDetails>;
     };
-    console.log(
-      `Found ${
-        invites.value.basicInvites.length
-      } open invites and ${Object.keys(
-        invites.value.detailedInvites[0]
-      )} detailed invites for user ${authState.value.email}`
-    );
+    
   } catch (error) {
     switch ((error as NuxtError).statusMessage) {
       case "unimplemented":
@@ -52,6 +46,7 @@ init();
 </script>
 <template>
   <div>
+    Not yet working, please set up a teacher account and send out invites. This is supposed to be a discovery feature.
     <div v-if="authState?.auth">
       <AuthState />
       <div>
